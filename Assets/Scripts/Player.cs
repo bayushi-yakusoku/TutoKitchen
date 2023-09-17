@@ -1,9 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
+using UnityEditor;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public sealed class Player : MonoBehaviour
 {
+    // Make it Singleton:
+    public static Player Instance { get; private set; }
 
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float rotateSpeed = 5f;
@@ -16,6 +21,32 @@ public class Player : MonoBehaviour
 
     private bool isWalking = false;
     private Vector3 lastInteractDirection;
+
+    private ClearCounter selectedCounter;
+
+    public class OnSelectedCounterChangedEventArgs : EventArgs
+    {
+        public ClearCounter selectedCounter;
+    }
+
+    public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
+
+    private void Awake()
+    {
+        // Singleton simple implementation:
+        if (Instance != null)
+        {
+            Debug.LogWarning("There is more than one Player instance... Destroying this one...");
+            Destroy(this.gameObject);
+        }
+
+        Instance = this;
+    }
+
+    private void Start()
+    {
+        gameInput.OnInteractAction += GameInput_OnInteractAction;
+    }
 
     private void Update()
     {
@@ -112,14 +143,49 @@ public class Player : MonoBehaviour
                 )
             )
         {
-            Debug.Log(raycastHit.transform);
+            //Debug.Log(raycastHit.transform);
 
             if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter))
             {
                 // Find ClearCounter
-                clearCounter.Interact();
+                //clearCounter.Interact();
+
+                if (selectedCounter != clearCounter)
+                {
+                    SetSelectedCounter(clearCounter);
+                }
+            }
+            else
+            {
+                SetSelectedCounter(null);
             }
         }
+        else
+        {
+            SetSelectedCounter(null);
+        }
 
+    }
+
+    private void GameInput_OnInteractAction(object sender, System.EventArgs e)
+    {
+        Debug.Log("Player: Interact Event");
+        if (selectedCounter)
+        {
+            selectedCounter.Interact();
+        }
+    }
+
+    private void SetSelectedCounter(ClearCounter counter)
+    {
+        selectedCounter = counter;
+
+        OnSelectedCounterChanged?.Invoke(
+                this, 
+                new OnSelectedCounterChangedEventArgs
+                {
+                    selectedCounter = selectedCounter
+                }
+            );
     }
 }
