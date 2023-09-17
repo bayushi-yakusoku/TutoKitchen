@@ -5,8 +5,7 @@ using System.Diagnostics.Tracing;
 using UnityEditor;
 using UnityEngine;
 
-public sealed class Player : MonoBehaviour
-{
+public sealed class Player : MonoBehaviour {
     // Make it Singleton:
     public static Player Instance { get; private set; }
 
@@ -24,18 +23,15 @@ public sealed class Player : MonoBehaviour
 
     private ClearCounter selectedCounter;
 
-    public class OnSelectedCounterChangedEventArgs : EventArgs
-    {
+    public class OnSelectedCounterChangedEventArgs : EventArgs {
         public ClearCounter selectedCounter;
     }
 
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
 
-    private void Awake()
-    {
+    private void Awake() {
         // Singleton simple implementation:
-        if (Instance != null)
-        {
+        if (Instance != null) {
             Debug.LogWarning("There is more than one Player instance... Destroying this one...");
             Destroy(this.gameObject);
         }
@@ -43,24 +39,20 @@ public sealed class Player : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
-    {
+    private void Start() {
         gameInput.OnInteractAction += GameInput_OnInteractAction;
     }
 
-    private void Update()
-    {
+    private void Update() {
         HandleMovement();
         HandleInteraction();
     }
 
-    public bool IsWalking()
-    {
+    public bool IsWalking() {
         return isWalking;
     }
 
-    private void HandleMovement()
-    {
+    private void HandleMovement() {
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
 
         isWalking = inputVector != Vector2.zero;
@@ -80,8 +72,7 @@ public sealed class Player : MonoBehaviour
                 moveDistance
             );
 
-        if (!canMove)
-        {
+        if (!canMove) {
             Vector3 moveX = new Vector3(moveDir.x, 0f, 0f);
             canMove = !Physics.CapsuleCast(
                     transform.position,
@@ -91,12 +82,10 @@ public sealed class Player : MonoBehaviour
                     moveDistance
                 );
 
-            if (canMove)
-            {
+            if (canMove) {
                 moveDir = moveX.normalized;
             }
-            else
-            {
+            else {
                 Vector3 moveZ = new Vector3(0f, 0f, moveDir.z);
                 canMove = !Physics.CapsuleCast(
                         transform.position,
@@ -106,15 +95,13 @@ public sealed class Player : MonoBehaviour
                         moveDistance
                     );
 
-                if (canMove)
-                {
+                if (canMove) {
                     moveDir = moveZ.normalized;
                 }
             }
         }
 
-        if (canMove)
-        {
+        if (canMove) {
             transform.position += moveDir * moveDistance;
         }
 
@@ -122,68 +109,57 @@ public sealed class Player : MonoBehaviour
 
     }
 
-    private void HandleInteraction()
-    {
+    private void HandleInteraction() {
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
 
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
 
-        if (moveDir != Vector3.zero)
-        {
+        if (moveDir != Vector3.zero) {
             lastInteractDirection = moveDir;
         }
 
         float interactDistance = 2f;
         if (Physics.Raycast(
-                    transform.position, 
-                    lastInteractDirection, 
-                    out RaycastHit raycastHit, 
+                    transform.position,
+                    lastInteractDirection,
+                    out RaycastHit raycastHit,
                     interactDistance,
                     couterLayerMask
                 )
-            )
-        {
+            ) {
             //Debug.Log(raycastHit.transform);
 
-            if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter))
-            {
+            if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter)) {
                 // Find ClearCounter
                 //clearCounter.Interact();
 
-                if (selectedCounter != clearCounter)
-                {
+                if (selectedCounter != clearCounter) {
                     SetSelectedCounter(clearCounter);
                 }
             }
-            else
-            {
+            else {
                 SetSelectedCounter(null);
             }
         }
-        else
-        {
+        else {
             SetSelectedCounter(null);
         }
 
     }
 
-    private void GameInput_OnInteractAction(object sender, System.EventArgs e)
-    {
+    private void GameInput_OnInteractAction(object sender, System.EventArgs e) {
         Debug.Log("Player: Interact Event");
-        if (selectedCounter)
-        {
+        if (selectedCounter) {
             selectedCounter.Interact();
         }
     }
 
-    private void SetSelectedCounter(ClearCounter counter)
-    {
+    private void SetSelectedCounter(ClearCounter counter) {
         selectedCounter = counter;
 
         OnSelectedCounterChanged?.Invoke(
-                this, 
-                new OnSelectedCounterChangedEventArgs
-                {
+                this,
+                new OnSelectedCounterChangedEventArgs {
                     selectedCounter = selectedCounter
                 }
             );
