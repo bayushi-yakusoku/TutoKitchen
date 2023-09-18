@@ -5,7 +5,7 @@ using System.Diagnostics.Tracing;
 using UnityEditor;
 using UnityEngine;
 
-public sealed class Player : MonoBehaviour {
+public sealed class Player : MonoBehaviour, IKitchenObjectParent {
     // Make it Singleton:
     public static Player Instance { get; private set; }
 
@@ -18,10 +18,12 @@ public sealed class Player : MonoBehaviour {
 
     [SerializeField] private LayerMask couterLayerMask;
 
+    [SerializeField] private Transform presentingPoint;
+
     private bool isWalking = false;
     private Vector3 lastInteractDirection;
-
     private ClearCounter selectedCounter;
+    private KitchenObject presentedObject;
 
     public class OnSelectedCounterChangedEventArgs : EventArgs {
         public ClearCounter selectedCounter;
@@ -63,7 +65,6 @@ public sealed class Player : MonoBehaviour {
 
         float playerHeight = 2f;
 
-        //bool canMove = !Physics.Raycast(transform.position, moveDir, playerSize);
         bool canMove = !Physics.CapsuleCast(
                 transform.position,
                 transform.position + Vector3.up * playerHeight,
@@ -127,12 +128,8 @@ public sealed class Player : MonoBehaviour {
                     couterLayerMask
                 )
             ) {
-            //Debug.Log(raycastHit.transform);
 
             if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter)) {
-                // Find ClearCounter
-                //clearCounter.Interact();
-
                 if (selectedCounter != clearCounter) {
                     SetSelectedCounter(clearCounter);
                 }
@@ -150,7 +147,7 @@ public sealed class Player : MonoBehaviour {
     private void GameInput_OnInteractAction(object sender, System.EventArgs e) {
         Debug.Log("Player: Interact Event");
         if (selectedCounter) {
-            selectedCounter.Interact();
+            selectedCounter.Interact(this);
         }
     }
 
@@ -163,5 +160,25 @@ public sealed class Player : MonoBehaviour {
                     selectedCounter = selectedCounter
                 }
             );
+    }
+
+    public Transform GetKitchenObjectFollowTransform() {
+        return presentingPoint;
+    }
+
+    public void SetPresentedObject(KitchenObject kitchenObject) {
+        presentedObject = kitchenObject;
+    }
+
+    public KitchenObject GetPresentedObject() {
+        return presentedObject;
+    }
+
+    public void ClearPresentedObject() {
+        presentedObject = null;
+    }
+
+    public bool HasPresentedObject() {
+        return presentedObject != null;
     }
 }

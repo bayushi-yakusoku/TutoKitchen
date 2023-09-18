@@ -2,32 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClearCounter : MonoBehaviour {
+public class ClearCounter : MonoBehaviour, IKitchenObjectParent {
 
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
     [SerializeField] private Transform counterTopPoint;
 
-    [SerializeField] private ClearCounter destinationCounter;
-    [SerializeField] bool Testing;
+    private KitchenObject presentedObject;
 
-    private KitchenObject _presentedObject;
-
-    public void Interact() {
-        if (_presentedObject is null) {
+    public void Interact(Player player) {
+        if (presentedObject is null) {
             Debug.Log(this + ": Interact");
 
             Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab, counterTopPoint);
 
-            kitchenObjectTransform.GetComponent<KitchenObject>().OwnerCounter = this;
+            kitchenObjectTransform.GetComponent<KitchenObject>().Owner = this;
 
-            Debug.Log(_presentedObject.GetKitchenObjectSO().objectName);
+            Debug.Log(presentedObject.GetKitchenObjectSO().objectName);
         }
         else {
-            Debug.Log("OwnerCounter: " + _presentedObject.OwnerCounter);
+            Debug.Log("OwnerCounter: " + presentedObject.Owner);
 
-            if (Testing && destinationCounter) {
-                Debug.Log("Moving object...");
-                _presentedObject.OwnerCounter = destinationCounter;
+            if (!player.HasPresentedObject()) {
+                presentedObject.Owner = player;
+
+                return;
             }
         }
     }
@@ -36,12 +34,19 @@ public class ClearCounter : MonoBehaviour {
         return counterTopPoint;
     }
 
-    public KitchenObject PresentedObject {
-        get => _presentedObject;
-
-        set {
-            _presentedObject = value;
-        }
+    public void SetPresentedObject(KitchenObject kitchenObject) {
+        presentedObject = kitchenObject;
     }
 
+    public KitchenObject GetPresentedObject() {
+        return presentedObject;
+    }
+
+    public void ClearPresentedObject() {
+        presentedObject = null;
+    }
+
+    public bool HasPresentedObject() {
+        return presentedObject != null;
+    }
 }
