@@ -22,7 +22,7 @@ public class KitchenObject : MonoBehaviour {
             _owner = value;
 
             if (_owner.HasPresentedObject()) {
-                Debug.LogError(_owner + " has already a Presented object!");
+                Debug.LogError(_owner + ": has already a Presented object!");
             }
 
             _owner.SetPresentedObject(this);

@@ -2,51 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClearCounter : MonoBehaviour, IKitchenObjectParent {
+public class ClearCounter : BaseCounter {
 
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
-    [SerializeField] private Transform counterTopPoint;
 
-    private KitchenObject presentedObject;
+    public override void Interact(Player player) {
+        Debug.Log(this + ": Interact");
 
-    public void Interact(Player player) {
-        if (presentedObject is null) {
-            Debug.Log(this + ": Interact");
+        if (player.HasPresentedObject()) {
+            Debug.Log(this + ": Player has an object");
 
-            Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab, counterTopPoint);
+            if (!HasPresentedObject()) {
+                Debug.Log(this + ": Counter do NOT have an object");
 
-            kitchenObjectTransform.GetComponent<KitchenObject>().Owner = this;
-
-            Debug.Log(presentedObject.GetKitchenObjectSO().objectName);
-        }
-        else {
-            Debug.Log("OwnerCounter: " + presentedObject.Owner);
-
-            if (!player.HasPresentedObject()) {
-                presentedObject.Owner = player;
-
-                return;
+                player.GetPresentedObject().Owner = this;
             }
         }
-    }
+        else {
+            Debug.Log(this + ": Player do NOT have an object");
 
-    public Transform GetKitchenObjectFollowTransform() {
-        return counterTopPoint;
-    }
+            if (HasPresentedObject()) {
+                Debug.Log(this + ": Counter has an object");
 
-    public void SetPresentedObject(KitchenObject kitchenObject) {
-        presentedObject = kitchenObject;
-    }
+                GetPresentedObject().Owner = player;
+            }
 
-    public KitchenObject GetPresentedObject() {
-        return presentedObject;
-    }
-
-    public void ClearPresentedObject() {
-        presentedObject = null;
-    }
-
-    public bool HasPresentedObject() {
-        return presentedObject != null;
+        }
     }
 }

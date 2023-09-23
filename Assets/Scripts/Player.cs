@@ -22,11 +22,11 @@ public sealed class Player : MonoBehaviour, IKitchenObjectParent {
 
     private bool isWalking = false;
     private Vector3 lastInteractDirection;
-    private ClearCounter selectedCounter;
+    private BaseCounter selectedCounter;
     private KitchenObject presentedObject;
 
     public class OnSelectedCounterChangedEventArgs : EventArgs {
-        public ClearCounter selectedCounter;
+        public BaseCounter selectedCounter;
     }
 
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
@@ -34,7 +34,7 @@ public sealed class Player : MonoBehaviour, IKitchenObjectParent {
     private void Awake() {
         // Singleton simple implementation:
         if (Instance != null) {
-            Debug.LogWarning("There is more than one Player instance... Destroying this one...");
+            Debug.LogWarning(this + ": There is more than one Player instance... Destroying this one...");
             Destroy(this.gameObject);
         }
 
@@ -129,9 +129,9 @@ public sealed class Player : MonoBehaviour, IKitchenObjectParent {
                 )
             ) {
 
-            if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter)) {
-                if (selectedCounter != clearCounter) {
-                    SetSelectedCounter(clearCounter);
+            if (raycastHit.transform.TryGetComponent(out BaseCounter baseCounter)) {
+                if (selectedCounter != baseCounter) {
+                    SetSelectedCounter(baseCounter);
                 }
             }
             else {
@@ -145,13 +145,13 @@ public sealed class Player : MonoBehaviour, IKitchenObjectParent {
     }
 
     private void GameInput_OnInteractAction(object sender, System.EventArgs e) {
-        Debug.Log("Player: Interact Event");
+        Debug.Log(this + ": received GameInput_OnInteractAction event");
         if (selectedCounter) {
             selectedCounter.Interact(this);
         }
     }
 
-    private void SetSelectedCounter(ClearCounter counter) {
+    private void SetSelectedCounter(BaseCounter counter) {
         selectedCounter = counter;
 
         OnSelectedCounterChanged?.Invoke(
