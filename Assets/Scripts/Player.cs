@@ -43,6 +43,7 @@ public sealed class Player : MonoBehaviour, IKitchenObjectParent {
 
     private void Start() {
         gameInput.OnInteractAction += GameInput_OnInteractAction;
+        gameInput.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
     }
 
     private void Update() {
@@ -59,7 +60,13 @@ public sealed class Player : MonoBehaviour, IKitchenObjectParent {
 
         isWalking = inputVector != Vector2.zero;
 
+        if (!isWalking) {
+            return;
+        }
+
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
+
+        transform.forward = Vector3.Slerp(transform.forward, moveDir, rotateSpeed * Time.deltaTime);
 
         float moveDistance = moveSpeed * Time.deltaTime;
 
@@ -106,7 +113,7 @@ public sealed class Player : MonoBehaviour, IKitchenObjectParent {
             transform.position += moveDir * moveDistance;
         }
 
-        transform.forward = Vector3.Slerp(transform.forward, moveDir, rotateSpeed * Time.deltaTime);
+        //transform.forward = Vector3.Slerp(transform.forward, moveDir, rotateSpeed * Time.deltaTime);
 
     }
 
@@ -146,8 +153,17 @@ public sealed class Player : MonoBehaviour, IKitchenObjectParent {
 
     private void GameInput_OnInteractAction(object sender, System.EventArgs e) {
         Debug.Log(this + ": received GameInput_OnInteractAction event");
+        
         if (selectedCounter) {
             selectedCounter.Interact(this);
+        }
+    }
+
+    private void GameInput_OnInteractAlternateAction(object sender, EventArgs e) {
+        Debug.Log(this + ": received GameInput_OnInteractAlternateAction event");
+        
+        if (selectedCounter) {
+            selectedCounter.InteractAlternate(this);
         }
     }
 
