@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CuttingCounter : BaseCounter {
 
-    [SerializeField] private KitchenObjectSO cuttingCounterSO;
+    [SerializeField] private CuttingRecipeSO[] cuttingRecipeSOArray;
 
     public override void Interact(Player player) {
         Debug.Log(this + ": Interact");
@@ -15,7 +15,13 @@ public class CuttingCounter : BaseCounter {
             if (!HasPresentedObject()) {
                 Debug.Log(this + ": Counter do NOT have an object");
 
-                player.GetPresentedObject().Owner = this;
+                if (HasRecipeWithInput(player.GetPresentedObject().GetKitchenObjectSO())) {
+                    Debug.Log(this + ": Recipe found");
+                    player.GetPresentedObject().Owner = this;
+                }
+                else {
+                    Debug.Log(this + ": NO recipe found");
+                }
             }
         }
         else {
@@ -36,9 +42,40 @@ public class CuttingCounter : BaseCounter {
         if (HasPresentedObject()) {
             Debug.Log(this + ": Counter has an object");
 
-            GetPresentedObject().DestroySelf();
+            KitchenObjectSO outputKitchenObjectSO = GetOutputForInput(
+                    GetPresentedObject().GetKitchenObjectSO()
+                );
 
-            KitchenObject.SpawnKitchenObject(cuttingCounterSO, this);
+            if (outputKitchenObjectSO is not null) {
+                GetPresentedObject().DestroySelf();
+                KitchenObject.SpawnKitchenObject(outputKitchenObjectSO, this);
+            }
         }
+    }
+
+    private bool HasRecipeWithInput(KitchenObjectSO inputKitchenObjectSO) {
+        foreach (CuttingRecipeSO cuttingRecipeSO in cuttingRecipeSOArray) {
+            if (cuttingRecipeSO.input == inputKitchenObjectSO) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    private KitchenObjectSO GetOutputForInput(KitchenObjectSO inputKitchenObjectSO) {
+        foreach (CuttingRecipeSO cuttingRecipeSO in cuttingRecipeSOArray) {
+            if (cuttingRecipeSO.input == inputKitchenObjectSO) {
+                Debug.Log(this + ": input is " + cuttingRecipeSO.input +
+                    " output is " + cuttingRecipeSO.output);
+
+                return cuttingRecipeSO.output;
+            }
+        }
+
+        Debug.Log(this + ": No recipe found");
+
+        return null;
     }
 }
