@@ -7,9 +7,28 @@ public class CuttingCounter : BaseCounter {
 
     [SerializeField] private CuttingRecipeSO[] cuttingRecipeSOArray;
 
-    private int currentCutCount = 0;
+    private int _currentCount = 0;
+    private int CurrentCutCount { 
+        get => _currentCount; 
+        
+        set { 
+            _currentCount = value;
+
+            if (_currentCount == 0) {
+                OnProgressChanged?.Invoke(this, new OnProgressChangedEventArgs {
+                    progressNormalized = 0f
+                }
+                );
+            }
+        } 
+    }
 
     public event EventHandler OnPlayerInteractAlternateCuttingCounter;
+
+    public event EventHandler<OnProgressChangedEventArgs> OnProgressChanged;
+    public class OnProgressChangedEventArgs : EventArgs {
+        public float progressNormalized;
+    }
 
     public override void Interact(Player player) {
         Debug.Log(this + ": Interact");
@@ -24,7 +43,7 @@ public class CuttingCounter : BaseCounter {
                     Debug.Log(this + ": Recipe found");
                     player.GetPresentedObject().Owner = this;
 
-                    currentCutCount = 0;
+                    CurrentCutCount = 0;
                 }
                 else {
                     Debug.Log(this + ": NO recipe found");
@@ -39,7 +58,7 @@ public class CuttingCounter : BaseCounter {
 
                 GetPresentedObject().Owner = player;
 
-                currentCutCount = 0;
+                CurrentCutCount = 0;
             }
 
         }
@@ -61,11 +80,16 @@ public class CuttingCounter : BaseCounter {
                 return;
             }
 
-            currentCutCount++;
+            OnPlayerInteractAlternateCuttingCounter?.Invoke(this, EventArgs.Empty);
 
-            OnPlayerInteractAlternateCuttingCounter.Invoke(this, EventArgs.Empty);
+            CurrentCutCount++;
 
-            if (currentCutCount >= cuttingRecipeSO.CutCountNeeded) {
+            OnProgressChanged?.Invoke(this, new OnProgressChangedEventArgs { 
+                    progressNormalized = (float) CurrentCutCount / cuttingRecipeSO.CutCountNeeded
+                }
+            );
+
+            if (CurrentCutCount >= cuttingRecipeSO.CutCountNeeded) {
                 KitchenObjectSO outputKitchenObjectSO = GetOutputForInput(GetPresentedObject()
                                                                             .GetKitchenObjectSO()
                                                                          );
@@ -75,7 +99,7 @@ public class CuttingCounter : BaseCounter {
                     KitchenObject.SpawnKitchenObject(outputKitchenObjectSO, this);
                 }
 
-                currentCutCount = 0;
+                CurrentCutCount = 0;
             }
         }
     }
