@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CuttingCounterVisual : MonoBehaviour
-{
+public class CuttingCounterVisual : MonoBehaviour {
     private const string CUT = "Cut";
     private int hashCut;
 
@@ -17,8 +16,7 @@ public class CuttingCounterVisual : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         cuttingCounter.OnPlayerInteractAlternateCuttingCounter += CuttingCounter_OnPlayerInteractAlternateCuttingCounter;
     }
 

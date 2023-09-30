@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LookAtCamera : MonoBehaviour
-{
+public class LookAtCamera : MonoBehaviour {
     private enum Mode {
         LookAt,
         LookAtInverted,
@@ -29,7 +28,7 @@ public class LookAtCamera : MonoBehaviour
                 break;
 
             case Mode.CameraForwardInverted:
-                transform.forward = - Camera.main.transform.forward;
+                transform.forward = -Camera.main.transform.forward;
                 break;
         }
     }
