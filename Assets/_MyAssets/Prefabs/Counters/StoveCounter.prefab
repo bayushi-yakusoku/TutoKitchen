@@ -259,6 +259,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1609863904482203671}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1734294980515860840 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1028534482321705343, guid: 93af8b85a17635f40a5b76ed82a86c18,
+    type: 3}
+  m_PrefabInstance: {fileID: 1609863904482203671}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3019260814391508156 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4589716710238282923, guid: 93af8b85a17635f40a5b76ed82a86c18,
@@ -286,6 +292,7 @@ MonoBehaviour:
   stoveCounter: {fileID: 9021397644913334727}
   stoveOnGameObject: {fileID: 1615148393827996016}
   particlesGameObject: {fileID: 6783930995353831161}
+  smokeGameObject: {fileID: 1734294980515860840}
 --- !u!1 &6783930995353831161 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5220305274835918574, guid: 93af8b85a17635f40a5b76ed82a86c18,
