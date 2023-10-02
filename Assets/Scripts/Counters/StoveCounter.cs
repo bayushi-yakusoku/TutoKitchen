@@ -6,6 +6,59 @@ using UnityEngine;
 public class StoveCounter : BaseCounter {
     [SerializeField] private FryingRecipeSO[] fryingRecipeSOArray;
 
+    public enum EnumState {
+        Idle,
+        Frying,
+        Fried,
+        Burned
+    }
+
+    private EnumState _state;
+    private EnumState State { 
+        get => _state;
+        set { 
+            _state = value;
+            OnStateChanged?.Invoke(this, new OnStateChangedEventArgs { state = this.State });
+        }
+    }
+
+    private FryingRecipeSO fryingRecipeSO;
+    private float fryingTimer;
+
+    public event EventHandler<OnStateChangedEventArgs> OnStateChanged;
+    public class OnStateChangedEventArgs : EventArgs {
+        public EnumState state;
+    }
+
+
+    private void Start() {
+        State = EnumState.Idle;
+        fryingTimer = 0f;
+
+        Debug.Log(this + $": state is {State}");
+    }
+
+    private void Update() {
+        if (HasPresentedObject()) {
+            switch(State) {
+                case EnumState.Idle:
+                    break;
+
+                case EnumState.Frying:
+                    Heating(EnumState.Fried);
+
+                    break;
+
+                case EnumState.Fried:
+                    Heating(EnumState.Burned);
+
+                    break;
+
+                case EnumState.Burned:
+                    break;
+            }
+        }
+    }
 
     public override void Interact(Player player) {
         Debug.Log(this + ": Interact");
@@ -19,6 +72,14 @@ public class StoveCounter : BaseCounter {
                 if (HasRecipeWithInput(player.GetPresentedObject().GetKitchenObjectSO())) {
                     Debug.Log(this + ": Recipe found");
                     player.GetPresentedObject().Owner = this;
+
+                    fryingRecipeSO = GetFryingRecipeSOWithInput(GetPresentedObject()
+                        .GetKitchenObjectSO());
+
+                    State = EnumState.Frying;
+                    fryingTimer = 0f;
+
+                    Debug.Log(this + $": state is {State}");
                 }
                 else {
                     Debug.Log(this + ": NO recipe found");
@@ -32,6 +93,11 @@ public class StoveCounter : BaseCounter {
                 Debug.Log(this + ": Counter has an object");
 
                 GetPresentedObject().Owner = player;
+
+                State = EnumState.Idle;
+                fryingTimer = 0f;
+
+                Debug.Log(this + $": state is {State}");
             }
         }
     }
@@ -46,7 +112,7 @@ public class StoveCounter : BaseCounter {
                                                                             .GetKitchenObjectSO()
                                                                          );
 
-            if (fryingRecipeSO is null) {
+            if (fryingRecipeSO == null) {
                 Debug.Log(this + ": no cutting recipe found");
 
                 return;
@@ -63,7 +129,7 @@ public class StoveCounter : BaseCounter {
     private KitchenObjectSO GetOutputForInput(KitchenObjectSO inputKitchenObjectSO) {
         FryingRecipeSO cuttingRecipeSO = GetFryingRecipeSOWithInput(inputKitchenObjectSO);
 
-        if (cuttingRecipeSO is not null) {
+        if (cuttingRecipeSO != null) {
             return cuttingRecipeSO.output;
         }
 
@@ -83,5 +149,25 @@ public class StoveCounter : BaseCounter {
         Debug.Log(this + ": No recipe found");
 
         return null;
+    }
+
+    private void Heating(EnumState nextState) {
+        fryingTimer += Time.deltaTime;
+
+        if (fryingRecipeSO == null) {
+            return;
+        }
+
+        if (fryingRecipeSO.cookingTime < fryingTimer) {
+            Debug.Log(this + $": {fryingRecipeSO.input} is {nextState}");
+            GetPresentedObject().DestroySelf();
+            KitchenObject.SpawnKitchenObject(fryingRecipeSO.output, this);
+            fryingRecipeSO = GetFryingRecipeSOWithInput(fryingRecipeSO.output);
+
+            State = nextState;
+            fryingTimer = 0f;
+
+            Debug.Log(this + $": state is {State}");
+        }
     }
 }
