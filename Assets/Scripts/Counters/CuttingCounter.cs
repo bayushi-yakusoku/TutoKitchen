@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CuttingCounter : BaseCounter {
+public class CuttingCounter : BaseCounter, IHasProgress {
 
     [SerializeField] private CuttingRecipeSO[] cuttingRecipeSOArray;
 
@@ -15,7 +15,7 @@ public class CuttingCounter : BaseCounter {
             _currentCount = value;
 
             if (_currentCount == 0) {
-                OnProgressChanged?.Invoke(this, new OnProgressChangedEventArgs {
+                OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs {
                     progressNormalized = 0f
                 }
                 );
@@ -24,11 +24,12 @@ public class CuttingCounter : BaseCounter {
     }
 
     public event EventHandler OnPlayerInteractAlternateCuttingCounter;
+    public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
 
-    public event EventHandler<OnProgressChangedEventArgs> OnProgressChanged;
-    public class OnProgressChangedEventArgs : EventArgs {
-        public float progressNormalized;
-    }
+    //public event EventHandler<OnProgressChangedEventArgs> OnProgressChanged;
+    //public class OnProgressChangedEventArgs : EventArgs {
+    //    public float progressNormalized;
+    //}
 
     public override void Interact(Player player) {
         Debug.Log(this + ": Interact");
@@ -84,7 +85,7 @@ public class CuttingCounter : BaseCounter {
 
             CurrentCutCount++;
 
-            OnProgressChanged?.Invoke(this, new OnProgressChangedEventArgs { 
+            OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs { 
                     progressNormalized = (float) CurrentCutCount / cuttingRecipeSO.CutCountNeeded
                 }
             );

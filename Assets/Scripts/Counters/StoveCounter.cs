@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
-public class StoveCounter : BaseCounter {
+public class StoveCounter : BaseCounter, IHasProgress {
     [SerializeField] private FryingRecipeSO[] fryingRecipeSOArray;
 
     public enum EnumState {
@@ -14,9 +15,9 @@ public class StoveCounter : BaseCounter {
     }
 
     private EnumState _state;
-    private EnumState State { 
+    private EnumState State {
         get => _state;
-        set { 
+        set {
             _state = value;
             OnStateChanged?.Invoke(this, new OnStateChangedEventArgs { state = this.State });
         }
@@ -26,6 +27,8 @@ public class StoveCounter : BaseCounter {
     private float fryingTimer;
 
     public event EventHandler<OnStateChangedEventArgs> OnStateChanged;
+    public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
+
     public class OnStateChangedEventArgs : EventArgs {
         public EnumState state;
     }
@@ -40,7 +43,7 @@ public class StoveCounter : BaseCounter {
 
     private void Update() {
         if (HasPresentedObject()) {
-            switch(State) {
+            switch (State) {
                 case EnumState.Idle:
                     break;
 
@@ -78,6 +81,7 @@ public class StoveCounter : BaseCounter {
 
                     State = EnumState.Frying;
                     fryingTimer = 0f;
+                    Invoke_OnProgressChanged(0f);
 
                     Debug.Log(this + $": state is {State}");
                 }
@@ -96,6 +100,7 @@ public class StoveCounter : BaseCounter {
 
                 State = EnumState.Idle;
                 fryingTimer = 0f;
+                Invoke_OnProgressChanged(0f);
 
                 Debug.Log(this + $": state is {State}");
             }
@@ -152,11 +157,15 @@ public class StoveCounter : BaseCounter {
     }
 
     private void Heating(EnumState nextState) {
+        float progress = 0f;
+
         fryingTimer += Time.deltaTime;
 
         if (fryingRecipeSO == null) {
             return;
         }
+
+        progress = fryingTimer / fryingRecipeSO.cookingTime;
 
         if (fryingRecipeSO.cookingTime < fryingTimer) {
             Debug.Log(this + $": {fryingRecipeSO.input} is {nextState}");
@@ -166,8 +175,17 @@ public class StoveCounter : BaseCounter {
 
             State = nextState;
             fryingTimer = 0f;
+            progress = 0f;
 
             Debug.Log(this + $": state is {State}");
         }
+
+        Invoke_OnProgressChanged(progress);
+    }
+
+    private void Invoke_OnProgressChanged(float progressNormalized) {
+        OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs {
+            progressNormalized = progressNormalized
+        });
     }
 }

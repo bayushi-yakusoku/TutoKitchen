@@ -4,13 +4,20 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ProgressBarUI : MonoBehaviour {
-    [SerializeField] private CuttingCounter cuttingCounter;
+    [SerializeField] private GameObject hasProgressGameObject;
     [SerializeField] private Image barImage;
+
+    private IHasProgress hasProgress;
 
     private float currentProgress = 0f;
 
     public void Start() {
-        cuttingCounter.OnProgressChanged += CuttingCounter_OnProgressChanged;
+        hasProgress = hasProgressGameObject.GetComponent<IHasProgress>();
+        if (hasProgress == null) {
+            Debug.LogError(this + ": Field do NOT have IHasProgress interface");
+        }
+
+        hasProgress.OnProgressChanged += HasProgress_OnProgressChanged;
 
         Hide();
     }
@@ -19,7 +26,8 @@ public class ProgressBarUI : MonoBehaviour {
         barImage.fillAmount = currentProgress;
     }
 
-    private void CuttingCounter_OnProgressChanged(object sender, CuttingCounter.OnProgressChangedEventArgs e) {
+    private void HasProgress_OnProgressChanged(object sender,
+        IHasProgress.OnProgressChangedEventArgs e) {
         currentProgress = e.progressNormalized;
 
         if (currentProgress == 0f || currentProgress == 1f) {
