@@ -36,9 +36,4 @@ public class PlateCounterVisual : MonoBehaviour {
         newVisual.transform.position += new Vector3(0, distanceBetweenPresentedVisuals * visualPresentedObjectList.Count, 0);
         visualPresentedObjectList.Add(newVisual);
     }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
 }

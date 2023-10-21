@@ -14,6 +14,8 @@ public class PlateCounter : BaseCounter {
 
     private float timer = 0;
 
+    private bool maxAlertPrinted = false;
+
     public event EventHandler OnSpawnNewPlate;
     public event EventHandler OnRemoveLastPlate;
 
@@ -36,6 +38,7 @@ public class PlateCounter : BaseCounter {
                 Debug.Log(this + ": removing a plate");
 
                 numberOfSpawnedPlates--;
+                maxAlertPrinted = false;
                 timer = 0;
                 OnRemoveLastPlate?.Invoke(this, EventArgs.Empty);
 
@@ -46,7 +49,10 @@ public class PlateCounter : BaseCounter {
 
     private void SpawnPlate() {
         if (numberOfSpawnedPlates >= maxPresentedObjects) {
-            Debug.Log(this + ": maximum visual presented object reached");
+            if (!maxAlertPrinted) { // to avoid flooding log...
+                Debug.Log(this + ": maximum visual presented object reached");
+                maxAlertPrinted = true;
+            }
 
             return;
         }

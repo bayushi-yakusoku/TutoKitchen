@@ -40,8 +40,6 @@ public class KitchenObject : MonoBehaviour {
         Destroy(gameObject);
     }
 
-
-
     public static KitchenObject SpawnKitchenObject(
         KitchenObjectSO kitchenObjectSO,
         IKitchenObjectParent kitchenObjectParent
