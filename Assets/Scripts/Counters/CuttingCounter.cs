@@ -26,10 +26,6 @@ public class CuttingCounter : BaseCounter, IHasProgress {
     public event EventHandler OnPlayerInteractAlternateCuttingCounter;
     public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
 
-    //public event EventHandler<OnProgressChangedEventArgs> OnProgressChanged;
-    //public class OnProgressChangedEventArgs : EventArgs {
-    //    public float progressNormalized;
-    //}
 
     public override void Interact(Player player) {
         Debug.Log(this + ": Interact");

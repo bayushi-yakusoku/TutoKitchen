@@ -112,9 +112,6 @@ public sealed class Player : MonoBehaviour, IKitchenObjectParent {
         if (canMove) {
             transform.position += moveDir * moveDistance;
         }
-
-        //transform.forward = Vector3.Slerp(transform.forward, moveDir, rotateSpeed * Time.deltaTime);
-
     }
 
     private void HandleInteraction() {
