@@ -13,13 +13,13 @@ public class PlateKitchenObject : KitchenObject
     }
 
     public bool TryAddIngredient(KitchenObjectSO ingredient) {
-        if (! authorizedKitchenObjects.Exists(x => x.objectName == ingredient.objectName)) {
+        if (! authorizedKitchenObjects.Contains(ingredient)) {
             Debug.Log(this + ": unauthorized ingredient");
 
             return false;
         }
 
-        if (plateContent.Exists(x => x.objectName == ingredient.objectName)) {
+        if (plateContent.Contains(ingredient)) {
             Debug.Log(this + ": ingredient already present");
 
             return false;
