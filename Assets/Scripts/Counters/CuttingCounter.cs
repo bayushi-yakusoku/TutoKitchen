@@ -36,7 +36,7 @@ public class CuttingCounter : BaseCounter, IHasProgress {
             if (HasPresentedObject()) {
                 Debug.Log(this + ": Counter has an object");
 
-                if (player.GetPresentedObject().GetType() == typeof(PlateKitchenObject)) {
+                if (player.GetPresentedObject() is PlateKitchenObject) {
                     Debug.Log(this + ": player is holding a plate");
 
                     PlateKitchenObject plate = (PlateKitchenObject)player.GetPresentedObject();

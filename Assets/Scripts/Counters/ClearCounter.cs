@@ -15,7 +15,7 @@ public class ClearCounter : BaseCounter {
             if (HasPresentedObject()) {
                 Debug.Log(this + ": Counter has an object");
 
-                if (player.GetPresentedObject().GetType() == typeof(PlateKitchenObject)) {
+                if (player.GetPresentedObject() is PlateKitchenObject) {
                     Debug.Log(this + ": player is holding a plate");
 
                     PlateKitchenObject plate = (PlateKitchenObject)player.GetPresentedObject();
@@ -23,7 +23,7 @@ public class ClearCounter : BaseCounter {
                         GetPresentedObject().DestroySelf();
                     }
                 }
-                else if (GetPresentedObject().GetType() == typeof(PlateKitchenObject)) {
+                else if (GetPresentedObject() is PlateKitchenObject) {
                     Debug.Log(this + ": counter is presenting a plate");
 
                     PlateKitchenObject plate = (PlateKitchenObject)GetPresentedObject();
