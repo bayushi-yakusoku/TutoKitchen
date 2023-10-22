@@ -15,19 +15,17 @@ public class ClearCounter : BaseCounter {
             if (HasPresentedObject()) {
                 Debug.Log(this + ": Counter has an object");
 
-                if (player.GetPresentedObject() is PlateKitchenObject) {
+                if (player.GetPresentedObject() is PlateKitchenObject playerPlate) {
                     Debug.Log(this + ": player is holding a plate");
 
-                    PlateKitchenObject plate = (PlateKitchenObject)player.GetPresentedObject();
-                    if (plate.TryAddIngredient(GetPresentedObject().GetKitchenObjectSO())) {
+                    if (playerPlate.TryAddIngredient(GetPresentedObject().GetKitchenObjectSO())) {
                         GetPresentedObject().DestroySelf();
                     }
                 }
-                else if (GetPresentedObject() is PlateKitchenObject) {
+                else if (GetPresentedObject() is PlateKitchenObject couterPlate) {
                     Debug.Log(this + ": counter is presenting a plate");
 
-                    PlateKitchenObject plate = (PlateKitchenObject)GetPresentedObject();
-                    if (plate.TryAddIngredient(player.GetPresentedObject().GetKitchenObjectSO())) {
+                    if (couterPlate.TryAddIngredient(player.GetPresentedObject().GetKitchenObjectSO())) {
                         player.GetPresentedObject().DestroySelf();
                     }
                 }
