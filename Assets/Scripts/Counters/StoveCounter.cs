@@ -69,7 +69,22 @@ public class StoveCounter : BaseCounter, IHasProgress {
         if (player.HasPresentedObject()) {
             Debug.Log(this + ": Player has an object");
 
-            if (!HasPresentedObject()) {
+            if (HasPresentedObject()) {
+                Debug.Log(this + ": Counter has an object");
+
+                if (player.GetPresentedObject() is PlateKitchenObject playerPlate) {
+                    Debug.Log(this + ": player is holding a plate");
+
+                    if (playerPlate.TryAddIngredient(GetPresentedObject().GetKitchenObjectSO())) {
+                        GetPresentedObject().DestroySelf();
+
+                        State = EnumState.Idle;
+                        fryingTimer = 0f;
+                        Invoke_OnProgressChanged(0f);
+                    }
+                }
+            }
+            else {
                 Debug.Log(this + ": Counter do NOT have an object");
 
                 if (HasRecipeWithInput(player.GetPresentedObject().GetKitchenObjectSO())) {
