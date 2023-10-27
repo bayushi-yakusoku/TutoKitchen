@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,12 @@ public class PlateKitchenObject : KitchenObject
     [SerializeField] private List<KitchenObjectSO> authorizedKitchenObjects;
 
     private List<KitchenObjectSO> plateContent;
+
+    public class AddIngredientEventArgument : EventArgs {
+        public KitchenObjectSO ingredient;
+    }
+
+    public event EventHandler<AddIngredientEventArgument> addIngredientEvent;
 
     private void Start() {
         plateContent = new();
@@ -26,7 +33,11 @@ public class PlateKitchenObject : KitchenObject
         }
 
         Debug.Log(this + ": ingredient added");
+
         plateContent.Add(ingredient);
+        addIngredientEvent?.Invoke(this, new AddIngredientEventArgument {
+            ingredient = ingredient
+        }) ;
 
         return true;
     }
