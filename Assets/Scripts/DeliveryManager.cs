@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public sealed class DeliveryManager : MonoBehaviour {
 
@@ -10,6 +12,9 @@ public sealed class DeliveryManager : MonoBehaviour {
     [SerializeField] private RecipesListSO possibleRecipesList;
     [SerializeField] private int maxWaitingRecipes;
     [SerializeField] private float spawnTimerDelay;
+
+    public event EventHandler OnSpawnNewRecipe;
+    public event EventHandler OnDeliveredRecipe;
 
     private List<RecipeSO> waitingRecipesList;
     private float spawnTimer = 0f;
@@ -38,10 +43,13 @@ public sealed class DeliveryManager : MonoBehaviour {
         if (waitingRecipesList.Count >= maxWaitingRecipes)
             return;
 
-        RecipeSO recipeSO = possibleRecipesList.fullList[Random.Range(0,
+        RecipeSO recipeSO = possibleRecipesList.fullList[UnityEngine.Random.Range(0,
             possibleRecipesList.fullList.Count)];
 
         waitingRecipesList.Add(recipeSO);
+
+        OnSpawnNewRecipe?.Invoke(this, EventArgs.Empty);
+
         Debug.Log(this + ": waiting for a " + recipeSO.name);
     }
 
@@ -69,11 +77,18 @@ public sealed class DeliveryManager : MonoBehaviour {
                 Debug.Log(this + ": delivering " + recipe.name);
 
                 waitingRecipesList.Remove(recipe);
+
+                OnDeliveredRecipe?.Invoke(this, EventArgs.Empty);
+
                 return;
             }
         }
 
         Debug.Log(this + ": failed to deliver an expected recipe");
 
+    }
+
+    public List<RecipeSO> GetWaitingRecipesList() {
+        return waitingRecipesList;
     }
 }
