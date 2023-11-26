@@ -20,7 +20,7 @@ public class DeliveryManagerSingleUI : MonoBehaviour {
     private void Update() {
         passedTime += Time.deltaTime;
 
-        progressBarImage.fillAmount = passedTime / timer;
+        //progressBarImage.fillAmount = passedTime / timer;
         //progressBarImage.fillAmount = 1f / 2;
     }
 
