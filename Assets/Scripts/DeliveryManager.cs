@@ -16,6 +16,9 @@ public sealed class DeliveryManager : MonoBehaviour {
     public event EventHandler OnSpawnNewRecipe;
     public event EventHandler OnDeliveredRecipe;
 
+    public event EventHandler OnDeliverySuccess;
+    public event EventHandler OnDeliveryFailed;
+
     private List<RecipeSO> waitingRecipesList;
     private float spawnTimer = 0f;
 
@@ -53,7 +56,7 @@ public sealed class DeliveryManager : MonoBehaviour {
         Debug.Log(this + ": waiting for a " + recipeSO.name);
     }
 
-    public void Deliver(PlateKitchenObject plate) {
+    public void Deliver(PlateKitchenObject plate, DeliveryCounter counter) {
         List<KitchenObjectSO> plateContent = new(plate.GetPlateContent());
 
         foreach (RecipeSO recipe in waitingRecipesList) {
@@ -78,13 +81,16 @@ public sealed class DeliveryManager : MonoBehaviour {
 
                 waitingRecipesList.Remove(recipe);
 
-                OnDeliveredRecipe?.Invoke(this, EventArgs.Empty);
+                OnDeliveredRecipe?.Invoke(counter, EventArgs.Empty);
+                OnDeliverySuccess?.Invoke(counter, EventArgs.Empty);
 
                 return;
             }
         }
 
         Debug.Log(this + ": failed to deliver an expected recipe");
+
+        OnDeliveryFailed?.Invoke(counter, EventArgs.Empty);
 
     }
 

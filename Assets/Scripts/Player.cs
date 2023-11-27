@@ -30,6 +30,7 @@ public sealed class Player : MonoBehaviour, IKitchenObjectParent {
     }
 
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
+    public event EventHandler OnPlayerPickedSomething;
 
     private void Awake() {
         // Singleton simple implementation:
@@ -181,6 +182,10 @@ public sealed class Player : MonoBehaviour, IKitchenObjectParent {
 
     public void SetPresentedObject(KitchenObject kitchenObject) {
         presentedObject = kitchenObject;
+
+        if (presentedObject != null) {
+            OnPlayerPickedSomething?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     public KitchenObject GetPresentedObject() {

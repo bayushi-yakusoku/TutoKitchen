@@ -24,6 +24,7 @@ public class CuttingCounter : BaseCounter, IHasProgress {
     }
 
     public event EventHandler OnPlayerInteractAlternateCuttingCounter;
+    public static event EventHandler OnPlayerInteractAlternateAnyCuttingCounter;
     public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
 
 
@@ -89,6 +90,7 @@ public class CuttingCounter : BaseCounter, IHasProgress {
             }
 
             OnPlayerInteractAlternateCuttingCounter?.Invoke(this, EventArgs.Empty);
+            OnPlayerInteractAlternateAnyCuttingCounter?.Invoke(this, EventArgs.Empty);
 
             CurrentCutCount++;
 
