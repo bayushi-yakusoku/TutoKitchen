@@ -15,6 +15,8 @@ public sealed class SoundManager : MonoBehaviour {
             Debug.LogWarning(this + ": There is more than one SoundManager instance... Destroying this one...");
             Destroy(this.gameObject);
         }
+
+        Instance = this;
     }
 
     private void Start() {
@@ -68,5 +70,10 @@ public sealed class SoundManager : MonoBehaviour {
 
     private void PlaySound(AudioClip[] audioClips, Vector3 position) {
         PlaySound(audioClips[Random.Range(0, audioClips.Length)], position, globalVolume);
+    }
+
+    public void PlayFootStepsSound(Vector3 position) {
+        PlaySound(audioClipRefsSO.footStep, position);
+
     }
 }
