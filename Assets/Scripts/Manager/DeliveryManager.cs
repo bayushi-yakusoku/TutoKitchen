@@ -82,6 +82,9 @@ public sealed class DeliveryManager : MonoBehaviour {
                 waitingRecipesList.Remove(recipe);
 
                 OnDeliveredRecipe?.Invoke(counter, EventArgs.Empty);
+
+                RecipesSuccesfullyDelivered++;
+
                 OnDeliverySuccess?.Invoke(counter, EventArgs.Empty);
 
                 return;
@@ -96,5 +99,13 @@ public sealed class DeliveryManager : MonoBehaviour {
 
     public List<RecipeSO> GetWaitingRecipesList() {
         return waitingRecipesList;
+    }
+
+    private int _recipesSuccesfullyDelivered = 0;
+    public int RecipesSuccesfullyDelivered {
+        get => _recipesSuccesfullyDelivered;
+        private set { 
+            _recipesSuccesfullyDelivered = value; 
+        }
     }
 }

@@ -21,12 +21,14 @@ public class KitchenGameManager : MonoBehaviour {
         set {
             _state = value;
             OnGameStateChange?.Invoke(this, new OnStateChangedEventArgs { state = this.State });
+
+            Debug.Log(this + $": Game state is: {State}");
         }
     }
 
     private float waitingToStartTimer = 1f;
     private float coutdownToStartTimer = 3f;
-    private float gamePlayingTimer = 10f;
+    private float gamePlayingTimer = 20f;
 
     public class OnStateChangedEventArgs : EventArgs {
         public EnumState state;
@@ -75,8 +77,6 @@ public class KitchenGameManager : MonoBehaviour {
             case EnumState.GameOver:
                 break;
         }
-
-        Debug.Log(this + $": Game state is: {State}");
     }
 
     public bool IsGamePlaying() {
