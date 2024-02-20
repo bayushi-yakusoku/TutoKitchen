@@ -151,7 +151,12 @@ public sealed class Player : MonoBehaviour, IKitchenObjectParent {
 
     private void GameInput_OnInteractAction(object sender, System.EventArgs e) {
         Debug.Log(this + ": received GameInput_OnInteractAction event");
-        
+
+        if (!KitchenGameManager.Instance.IsGamePlaying()) {
+            Debug.Log(this + "Game is not playing");
+            return;
+        }
+
         if (selectedCounter) {
             selectedCounter.Interact(this);
         }
@@ -159,7 +164,12 @@ public sealed class Player : MonoBehaviour, IKitchenObjectParent {
 
     private void GameInput_OnInteractAlternateAction(object sender, EventArgs e) {
         Debug.Log(this + ": received GameInput_OnInteractAlternateAction event");
-        
+
+        if (!KitchenGameManager.Instance.IsGamePlaying()) {
+            Debug.Log(this + "Game is not playing");
+            return;
+        }
+
         if (selectedCounter) {
             selectedCounter.InteractAlternate(this);
         }
