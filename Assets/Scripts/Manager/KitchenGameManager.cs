@@ -28,7 +28,8 @@ public class KitchenGameManager : MonoBehaviour {
 
     private float waitingToStartTimer = 1f;
     private float coutdownToStartTimer = 3f;
-    private float gamePlayingTimer = 20f;
+    private float gamePlayingTimer;
+    private float gamePlayingTimerMax = 20f;
 
     public class OnStateChangedEventArgs : EventArgs {
         public EnumState state;
@@ -62,6 +63,7 @@ public class KitchenGameManager : MonoBehaviour {
                 coutdownToStartTimer -= Time.deltaTime;
                 if (coutdownToStartTimer < 0f) {
                     State = EnumState.GamePlaying;
+                    gamePlayingTimer = gamePlayingTimerMax;
                 }
 
                 break;
@@ -89,5 +91,14 @@ public class KitchenGameManager : MonoBehaviour {
 
     public float GetCountDownToStartTimer() {
         return coutdownToStartTimer;
+    }
+
+    public float GetGamePlayingTimerNormalized() {
+        if (State != EnumState.GamePlaying) {
+            return 0f;
+        }
+
+        return 1 - (gamePlayingTimer / gamePlayingTimerMax);
+
     }
 }
