@@ -9,7 +9,8 @@ public class KitchenGameManager : MonoBehaviour {
         WaitingToStart,
         CountDownToStart,
         GamePlaying,
-        GameOver
+        GameOver,
+        GamePause
     }
 
     private EnumState _state;
@@ -44,6 +45,14 @@ public class KitchenGameManager : MonoBehaviour {
         Instance = this;
 
         State = EnumState.WaitingToStart;
+    }
+
+    private void Start() {
+        GameInputManager.Instance.OnPauseAction += GameInputManager_OnPauseAction;
+    }
+
+    private void GameInputManager_OnPauseAction(object sender, EventArgs e) {
+        TogglePause();
     }
 
     private void Update() {
@@ -97,5 +106,16 @@ public class KitchenGameManager : MonoBehaviour {
 
         return 1 - (gamePlayingTimer / gamePlayingTimerMax);
 
+    }
+
+    public void TogglePause() {
+        if (State == EnumState.GamePause) {
+            Time.timeScale = 1f;
+            State = EnumState.GamePlaying;
+        }
+        else if(State == EnumState.GamePlaying){
+            Time.timeScale = 0f;
+            State = EnumState.GamePause;
+        }
     }
 }

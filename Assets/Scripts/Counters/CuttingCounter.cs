@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CuttingCounter : BaseCounter, IHasProgress {
@@ -22,9 +23,13 @@ public class CuttingCounter : BaseCounter, IHasProgress {
     }
 
     public event EventHandler OnPlayerInteractAlternateCuttingCounter;
-    public static event EventHandler OnPlayerInteractAlternateAnyCuttingCounter;
     public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
 
+    public static event EventHandler OnPlayerInteractAlternateAnyCuttingCounter;
+
+    public new static void ResetStaticData() {
+        OnPlayerInteractAlternateAnyCuttingCounter = null;
+    }
 
     public override void Interact(Player player) {
         Debug.Log(this + ": Interact");

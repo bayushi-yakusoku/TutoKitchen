@@ -10,7 +10,7 @@ public sealed class Player : MonoBehaviour, IKitchenObjectParent {
 
     [SerializeField] private float playerRadius = 1f;
 
-    [SerializeField] private GameInput gameInput;
+    [SerializeField] private GameInputManager gameInput;
 
     [SerializeField] private LayerMask couterLayerMask;
 
