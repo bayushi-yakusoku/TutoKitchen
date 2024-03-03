@@ -5,17 +5,19 @@ public class GamePauseUI : MonoBehaviour {
 
     [SerializeField] private Button mainMenuButton;
     [SerializeField] private Button resumeButton;
+    [SerializeField] private Button optionsButton;
 
 
     private void Start() {
-        KitchenGameManager.Instance.OnGameStateChange += Instance_OnGameStateChange;
-        mainMenuButton.onClick.AddListener(MainMenuAction);
-        resumeButton.onClick.AddListener(ResumeAction);
+        KitchenGameManager.Instance.OnGameStateChange += KitchenGameManager_OnGameStateChange;
+        mainMenuButton.onClick.AddListener(MainMenuButtonClick);
+        resumeButton.onClick.AddListener(ResumeButtonClick);
+        optionsButton.onClick.AddListener(OptionsButtonClick);
         
         Hide();
     }
 
-    private void Instance_OnGameStateChange(object sender, KitchenGameManager.OnStateChangedEventArgs e) {
+    private void KitchenGameManager_OnGameStateChange(object sender, KitchenGameManager.OnStateChangedEventArgs e) {
         if (e.state == KitchenGameManager.EnumState.GamePause) {
             Show();
         }
@@ -24,12 +26,16 @@ public class GamePauseUI : MonoBehaviour {
         }
     }
 
-    private void ResumeAction() {
+    private void ResumeButtonClick() {
         KitchenGameManager.Instance.TogglePause();
     }
 
-    private void MainMenuAction() {
+    private void MainMenuButtonClick() {
         Loader.LoadScene(Loader.EnumScene.MainMenuScene);
+    }
+
+    private void OptionsButtonClick() {
+        KitchenGameManager.Instance.ToggleOptions();
     }
 
     private void Show() {

@@ -5,7 +5,9 @@ public sealed class SoundManager : MonoBehaviour {
     public static SoundManager Instance { get; private set; }
 
     [SerializeField] private AudioClipRefsSO audioClipRefsSO;
-    [SerializeField] private float globalVolume;
+
+    private float _globalVolume = 1f;
+    public float GlobalVolume { get => _globalVolume; set => _globalVolume = value; }
 
     private void Awake() {
         // Singleton simple implementation:
@@ -67,7 +69,7 @@ public sealed class SoundManager : MonoBehaviour {
     }
 
     private void PlaySound(AudioClip[] audioClips, Vector3 position) {
-        PlaySound(audioClips[Random.Range(0, audioClips.Length)], position, globalVolume);
+        PlaySound(audioClips[Random.Range(0, audioClips.Length)], position, GlobalVolume);
     }
 
     public void PlayFootStepsSound(Vector3 position) {

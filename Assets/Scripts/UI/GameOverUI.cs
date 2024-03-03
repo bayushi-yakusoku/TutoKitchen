@@ -10,7 +10,7 @@ public class GameOverUI : MonoBehaviour {
 
     private void Start() {
         KitchenGameManager.Instance.OnGameStateChange += Instance_OnGameStateChange;
-        mainMenuButton.onClick.AddListener(MainMenuAction);
+        mainMenuButton.onClick.AddListener(MainMenuButtonClick);
 
         recipesDeliveredText.text = "0";
         
@@ -36,7 +36,7 @@ public class GameOverUI : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
-    private void MainMenuAction() {
+    private void MainMenuButtonClick() {
         Loader.LoadScene(Loader.EnumScene.MainMenuScene);
     }
 }
