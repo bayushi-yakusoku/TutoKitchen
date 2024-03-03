@@ -4,10 +4,20 @@ public sealed class SoundManager : MonoBehaviour {
     // Make it Singleton:
     public static SoundManager Instance { get; private set; }
 
+    private const string PLAYER_PREF_SOUND_VOLUME = "PlayerPrefVolume";
+
     [SerializeField] private AudioClipRefsSO audioClipRefsSO;
 
     private float _globalVolume = 1f;
-    public float GlobalVolume { get => _globalVolume; set => _globalVolume = value; }
+    public float GlobalVolume {
+        get => _globalVolume;
+
+        set { 
+            _globalVolume = value;
+            PlayerPrefs.SetFloat(PLAYER_PREF_SOUND_VOLUME, _globalVolume);
+            PlayerPrefs.Save();
+        } 
+    }
 
     private void Awake() {
         // Singleton simple implementation:
@@ -17,6 +27,8 @@ public sealed class SoundManager : MonoBehaviour {
         }
 
         Instance = this;
+
+        GlobalVolume = PlayerPrefs.GetFloat(PLAYER_PREF_SOUND_VOLUME, 0.5f);
     }
 
     private void Start() {

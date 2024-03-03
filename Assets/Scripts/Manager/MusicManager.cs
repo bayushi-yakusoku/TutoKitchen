@@ -6,6 +6,8 @@ public class MusicManager : MonoBehaviour {
     // Make it Singleton:
     public static MusicManager Instance { get; private set; }
 
+    private const string PLAYER_PREF_MUSIC_VOLUME = "PlayerPrefMusicVolume";
+
     private AudioSource gameMusic;
 
     private void Awake() {
@@ -18,6 +20,10 @@ public class MusicManager : MonoBehaviour {
         Instance = this;
 
         gameMusic = GetComponent<AudioSource>();
+
+        GlobalVolume = PlayerPrefs.GetFloat(PLAYER_PREF_MUSIC_VOLUME, 0.3f);
+
+        gameMusic.volume = GlobalVolume;
     }
 
     private float _globalVolume = 1f;
@@ -28,6 +34,8 @@ public class MusicManager : MonoBehaviour {
             _globalVolume = value;
 
             gameMusic.volume = _globalVolume;
+            PlayerPrefs.SetFloat(PLAYER_PREF_MUSIC_VOLUME, _globalVolume);
+            PlayerPrefs.Save();
         } 
     }
 }
