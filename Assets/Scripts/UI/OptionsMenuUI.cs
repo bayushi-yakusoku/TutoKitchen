@@ -11,6 +11,28 @@ public class OptionsMenuUI : MonoBehaviour {
     [SerializeField] private Button musicButton;
     [SerializeField] private TextMeshProUGUI musicButtonText;
 
+
+    [SerializeField] private Button moveUpButton;
+    [SerializeField] private TextMeshProUGUI moveUpText;
+
+    [SerializeField] private Button moveDownButton;
+    [SerializeField] private TextMeshProUGUI moveDownText;
+
+    [SerializeField] private Button moveLeftButton;
+    [SerializeField] private TextMeshProUGUI moveLeftText;
+
+    [SerializeField] private Button moveRightButton;
+    [SerializeField] private TextMeshProUGUI moveRightText;
+
+    [SerializeField] private Button interactButton;
+    [SerializeField] private TextMeshProUGUI interactText;
+
+    [SerializeField] private Button alternateButton;
+    [SerializeField] private TextMeshProUGUI alternateText;
+
+    [SerializeField] private Button pauseButton;
+    [SerializeField] private TextMeshProUGUI pauseText;
+
     [SerializeField] private Button backButton;
 
     private void Start() {
@@ -67,5 +89,14 @@ public class OptionsMenuUI : MonoBehaviour {
     private void UpdateUI() {
         soundButtonText.text = "Sound updated:" + Mathf.Round(SoundManager.Instance.GlobalVolume * 10f);
         musicButtonText.text = "Music updated:" + Mathf.Round(MusicManager.Instance.GlobalVolume * 10f);
+
+        moveUpText.text     = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.MoveUp);
+        moveDownText.text   = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.MoveDown);
+        moveLeftText.text   = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.MoveLeft);
+        moveRightText.text  = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.MoveRight);
+        interactText.text   = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.Interact);
+        alternateText.text  = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.Alternate);
+        pauseText.text      = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.Pause);
+
     }
 }
