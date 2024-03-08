@@ -11,7 +11,8 @@ public class KitchenGameManager : MonoBehaviour {
         GamePlaying,
         GameOver,
         GamePause,
-        GameOptions
+        GameOptions,
+        GameWaitKeyPress
     }
 
     private EnumState _state;
@@ -151,5 +152,17 @@ public class KitchenGameManager : MonoBehaviour {
                 break;
         }
 
+    }
+
+    public void SetBinding(GameInputManager.EnumBinding binding) {
+        Debug.Log(this + $": Start rebinding {binding}");
+        State = EnumState.GameWaitKeyPress;
+
+        GameInputManager.Instance.SetBinding(binding, Rebound);
+    }
+
+    private void Rebound() {
+        Debug.Log(this + ": End of rebinding");
+        State = EnumState.GameOptions;
     }
 }

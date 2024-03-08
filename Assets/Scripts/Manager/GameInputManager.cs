@@ -1,9 +1,13 @@
 using System;
+using System.Net.Security;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameInputManager : MonoBehaviour {
     // Make it Singleton:
     public static GameInputManager Instance { get; private set; }
+
+    private const string PLAYER_PREF_BINDINGS = "PlayerPrefBindings";
 
     private GeneratedPlayerInputActions playerInputActions;
 
@@ -25,12 +29,20 @@ public class GameInputManager : MonoBehaviour {
         // Singleton simple implementation:
         if (Instance != null) {
             Debug.LogWarning(this + ": There is more than one GameInputManager instance... Destroying this one...");
+
             Destroy(this.gameObject);
         }
 
         Instance = this;
 
         playerInputActions = new();
+
+        if (PlayerPrefs.HasKey(PLAYER_PREF_BINDINGS)) {
+            Debug.Log(this + $": get player bindings");
+
+            playerInputActions.LoadBindingOverridesFromJson(PlayerPrefs.GetString(PLAYER_PREF_BINDINGS));
+        }
+        
         playerInputActions.Player.Enable();
 
         playerInputActions.Player.Interact.performed += Interact_performed;
@@ -48,25 +60,20 @@ public class GameInputManager : MonoBehaviour {
 
     private void Pause_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj) {
         Debug.Log(this + ": fire OnPauseAction event");
+
         OnPauseAction?.Invoke(this, EventArgs.Empty);
     }
 
     private void InteractAlternate_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj) {
         Debug.Log(this + ": fire OnInteractAlternateAction event");
+
         OnInteractAlternateAction?.Invoke(this, EventArgs.Empty);
     }
 
     private void Interact_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj) {
         Debug.Log(this + ": fire OnInteractAction event");
+
         OnInteractAction?.Invoke(this, EventArgs.Empty);
-
-        //Debug.Log(this + ": MoveUp    -> " + GetBindingText(EnumBinding.MoveUp));
-        //Debug.Log(this + ": MoveDown  -> " + GetBindingText(EnumBinding.MoveDown));
-        //Debug.Log(this + ": MoveLeft  -> " + GetBindingText(EnumBinding.MoveLeft));
-        //Debug.Log(this + ": MoveRight -> " + GetBindingText(EnumBinding.MoveRight));
-        //Debug.Log(this + ": Interact  -> " + GetBindingText(EnumBinding.Interact));
-        //Debug.Log(this + ": Alternate -> " + GetBindingText(EnumBinding.Alternate));
-
     }
 
     public Vector2 GetMovementVectorNormalized() {
@@ -103,7 +110,59 @@ public class GameInputManager : MonoBehaviour {
         }
     }
 
-    public void SetBinding(EnumBinding binding) {
+    public void SetBinding(EnumBinding binding, Action onCompleteRebind) {
+        playerInputActions.Player.Disable();
 
+        InputAction action;
+        int index = 0;
+
+        switch (binding) {
+            default:
+            case EnumBinding.Pause:
+                action = playerInputActions.Player.Pause;
+                break;
+
+            case EnumBinding.Interact:
+                action = playerInputActions.Player.Interact;
+                break;
+
+            case EnumBinding.Alternate:
+                action = playerInputActions.Player.InteractAlternate;
+                break;
+
+            case EnumBinding.MoveUp:
+                action = playerInputActions.Player.Move;
+                index = 1;
+                break;
+
+            case EnumBinding.MoveDown:
+                action = playerInputActions.Player.Move;
+                index = 2;
+                break;
+
+            case EnumBinding.MoveLeft:
+                action = playerInputActions.Player.Move;
+                index = 3;
+                break;
+
+            case EnumBinding.MoveRight:
+                action = playerInputActions.Player.Move;
+                index = 4;
+                break;
+        }
+
+        action.PerformInteractiveRebinding(index)
+            .OnComplete(callback => {
+                callback.Dispose();
+
+                playerInputActions.Player.Enable();
+
+                PlayerPrefs.SetString(PLAYER_PREF_BINDINGS, playerInputActions.SaveBindingOverridesAsJson());
+                PlayerPrefs.Save();
+
+                onCompleteRebind();
+            }
+        )
+            .Start();
     }
 }

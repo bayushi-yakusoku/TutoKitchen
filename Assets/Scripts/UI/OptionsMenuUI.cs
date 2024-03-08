@@ -41,6 +41,14 @@ public class OptionsMenuUI : MonoBehaviour {
         musicButton.onClick.AddListener(MusicButtonClick);
         backButton.onClick.AddListener(BackButtonClick);
 
+        moveUpButton.onClick.AddListener(() => KitchenGameManager.Instance.SetBinding(GameInputManager.EnumBinding.MoveUp));
+        moveDownButton.onClick.AddListener(() => KitchenGameManager.Instance.SetBinding(GameInputManager.EnumBinding.MoveDown));
+        moveLeftButton.onClick.AddListener(() => KitchenGameManager.Instance.SetBinding(GameInputManager.EnumBinding.MoveLeft));
+        moveRightButton.onClick.AddListener(() => KitchenGameManager.Instance.SetBinding(GameInputManager.EnumBinding.MoveRight));
+        interactButton.onClick.AddListener(() => KitchenGameManager.Instance.SetBinding(GameInputManager.EnumBinding.Interact));
+        alternateButton.onClick.AddListener(() => KitchenGameManager.Instance.SetBinding(GameInputManager.EnumBinding.Alternate));
+        pauseButton.onClick.AddListener(() => KitchenGameManager.Instance.SetBinding(GameInputManager.EnumBinding.Pause));
+
         UpdateUI();
         Hide();
     }
@@ -79,6 +87,7 @@ public class OptionsMenuUI : MonoBehaviour {
     }
 
     private void Show() {
+        UpdateUI();
         gameObject.SetActive(true);
     }
 

@@ -10,7 +10,7 @@ public class KeyRebindingUI : MonoBehaviour {
     }
 
     private void KitchenGameManager_OnGameStateChange(object sender, KitchenGameManager.OnStateChangedEventArgs e) {
-        if (e.state == KitchenGameManager.EnumState.GameOptions) {
+        if (e.state == KitchenGameManager.EnumState.GameWaitKeyPress) {
             Show();
         }
         else {
