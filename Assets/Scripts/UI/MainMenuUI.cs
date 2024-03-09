@@ -13,6 +13,10 @@ public class MainMenuUI : MonoBehaviour {
         Time.timeScale = 1f;
     }
 
+    private void Start() {
+        playButton.Select();
+    }
+
     private void PlayButtonClick() {
         Loader.LoadScene(Loader.EnumScene.GameScene);
     }

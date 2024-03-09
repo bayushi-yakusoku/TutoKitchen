@@ -89,6 +89,7 @@ public class OptionsMenuUI : MonoBehaviour {
     private void Show() {
         UpdateUI();
         gameObject.SetActive(true);
+        soundButton.Select();
     }
 
     private void Hide() {

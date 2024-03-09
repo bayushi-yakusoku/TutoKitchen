@@ -30,6 +30,7 @@ public class GameOverUI : MonoBehaviour {
         recipesDeliveredText.text = DeliveryManager.Instance.RecipesSuccesfullyDelivered.ToString();
 
         gameObject.SetActive(true);
+        mainMenuButton.Select();
     }
 
     private void Hide() {
