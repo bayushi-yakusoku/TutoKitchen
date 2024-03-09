@@ -29,7 +29,7 @@ public class KitchenGameManager : MonoBehaviour {
     private float waitingToStartTimer = 1f;
     private float coutdownToStartTimer = 3f;
     private float gamePlayingTimer;
-    private float gamePlayingTimerMax = 20f;
+    private float gamePlayingTimerMax = 120f;
 
     public class OnStateChangedEventArgs : EventArgs {
         public EnumState state;
