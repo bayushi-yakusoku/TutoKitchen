@@ -41,6 +41,10 @@ public sealed class DeliveryManager : MonoBehaviour {
     }
 
     private void Spawn() {
+        if (KitchenGameManager.Instance.State != KitchenGameManager.EnumState.GamePlaying) {
+            return;
+        }
+
         if (waitingRecipesList.Count >= maxWaitingRecipes)
             return;
 

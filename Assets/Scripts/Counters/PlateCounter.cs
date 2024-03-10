@@ -46,6 +46,10 @@ public class PlateCounter : BaseCounter {
     }
 
     private void SpawnPlate() {
+        if (KitchenGameManager.Instance.State != KitchenGameManager.EnumState.GamePlaying) {
+            return;
+        }
+
         if (numberOfSpawnedPlates >= maxPresentedObjects) {
             if (!maxAlertPrinted) { // to avoid flooding log...
                 Debug.Log(this + ": maximum visual presented object reached");

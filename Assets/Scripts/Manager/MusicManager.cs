@@ -24,6 +24,8 @@ public class MusicManager : MonoBehaviour {
         GlobalVolume = PlayerPrefs.GetFloat(PLAYER_PREF_MUSIC_VOLUME, 0.3f);
 
         gameMusic.volume = GlobalVolume;
+
+        gameMusic.Pause();
     }
 
     private float _globalVolume = 1f;
@@ -37,5 +39,9 @@ public class MusicManager : MonoBehaviour {
             PlayerPrefs.SetFloat(PLAYER_PREF_MUSIC_VOLUME, _globalVolume);
             PlayerPrefs.Save();
         } 
+    }
+
+    public void Play() {
+        gameMusic.Play();
     }
 }

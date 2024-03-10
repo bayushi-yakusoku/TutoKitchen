@@ -12,13 +12,13 @@ public class KitchenGameManager : MonoBehaviour {
         GameOver,
         GamePause,
         GameOptions,
-        GameWaitKeyPress
+        GameWaitKeyPressForRebind
     }
 
     private EnumState _state;
-    private EnumState State {
+    public EnumState State {
         get => _state;
-        set {
+        private set {
             _state = value;
             OnGameStateChange?.Invoke(this, new OnStateChangedEventArgs { state = this.State });
 
@@ -45,12 +45,23 @@ public class KitchenGameManager : MonoBehaviour {
         }
 
         Instance = this;
-
-        State = EnumState.WaitingToStart;
     }
 
     private void Start() {
         GameInputManager.Instance.OnPauseAction += GameInputManager_OnPauseAction;
+        GameInputManager.Instance.OnInteractAction += GameInputManager_OnInteractAction;
+
+        State = EnumState.WaitingToStart;
+    }
+
+    private void GameInputManager_OnInteractAction(object sender, EventArgs e) {
+        if (State == EnumState.WaitingToStart) {
+            State = EnumState.CountDownToStart;
+            
+            MusicManager.Instance.Play();
+
+            GameInputManager.Instance.OnInteractAction -= GameInputManager_OnInteractAction;
+        }
     }
 
     private void GameInputManager_OnPauseAction(object sender, EventArgs e) {
@@ -59,13 +70,13 @@ public class KitchenGameManager : MonoBehaviour {
 
     private void Update() {
         switch (State) {
-            case EnumState.WaitingToStart:
-                waitingToStartTimer -= Time.deltaTime;
-                if (waitingToStartTimer < 0f) {
-                    State = EnumState.CountDownToStart;
-                }
+            //case EnumState.WaitingToStart:
+            //    waitingToStartTimer -= Time.deltaTime;
+            //    if (waitingToStartTimer < 0f) {
+            //        State = EnumState.CountDownToStart;
+            //    }
 
-                break;
+            //    break;
 
             case EnumState.CountDownToStart:
                 coutdownToStartTimer -= Time.deltaTime;
@@ -156,7 +167,7 @@ public class KitchenGameManager : MonoBehaviour {
 
     public void SetBinding(GameInputManager.EnumBinding binding) {
         Debug.Log(this + $": Start rebinding {binding}");
-        State = EnumState.GameWaitKeyPress;
+        State = EnumState.GameWaitKeyPressForRebind;
 
         GameInputManager.Instance.SetBinding(binding, Rebound);
     }
