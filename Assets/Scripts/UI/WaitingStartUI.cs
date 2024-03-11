@@ -14,7 +14,7 @@ public class WaitingStartUI : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI tutoPauseText;
 
     private void Start() {
-        Hide();
+        Show();
 
         KitchenGameManager.Instance.OnGameStateChange += KitchenGameObject_OnGameStateChange;
 
