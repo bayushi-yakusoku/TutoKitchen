@@ -4,6 +4,15 @@ using UnityEngine;
 public class GameStartCountDownUI : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI countDownText;
 
+    private const string NUMBER_POPUP_TRIGGER = "NumberPopup";
+
+    private Animator animator;
+
+    private int previousCountDownNumber;
+
+    private void Awake() {
+        animator = GetComponent<Animator>();
+    }
 
     private void Start() {
         KitchenGameManager.Instance.OnGameStateChange += Instance_OnGameStateChange;
@@ -29,6 +38,14 @@ public class GameStartCountDownUI : MonoBehaviour {
     }
 
     private void Update() {
-        countDownText.text = Mathf.Ceil(KitchenGameManager.Instance.GetCountDownToStartTimer()).ToString();
+        int countDownNumber = Mathf.CeilToInt(KitchenGameManager.Instance.GetCountDownToStartTimer());
+        countDownText.text = countDownNumber.ToString();
+
+        if (countDownNumber != previousCountDownNumber) {
+            previousCountDownNumber = countDownNumber;
+
+            animator.SetTrigger(NUMBER_POPUP_TRIGGER);
+            SoundManager.Instance.PlayCountDownSound();
+        }
     }
 }

@@ -88,4 +88,9 @@ public sealed class SoundManager : MonoBehaviour {
         PlaySound(audioClipRefsSO.footStep, position);
 
     }
+
+    public void PlayCountDownSound() {
+        PlaySound(audioClipRefsSO.warning, Vector3.zero);
+
+    }
 }
