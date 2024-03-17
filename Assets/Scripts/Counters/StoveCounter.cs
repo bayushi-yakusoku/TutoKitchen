@@ -12,9 +12,9 @@ public class StoveCounter : BaseCounter, IHasProgress {
     }
 
     private EnumState _state;
-    private EnumState State {
+    public EnumState State {
         get => _state;
-        set {
+        private set {
             _state = value;
             OnStateChanged?.Invoke(this, new OnStateChangedEventArgs { state = this.State });
         }
