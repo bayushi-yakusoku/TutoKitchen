@@ -200,4 +200,13 @@ public class StoveCounter : BaseCounter, IHasProgress {
             progressNormalized = progressNormalized
         });
     }
+
+    public bool IsFlashing() {
+        if (State == EnumState.Fried) {
+            return true;
+        }
+
+        return false;
+    }
+
 }

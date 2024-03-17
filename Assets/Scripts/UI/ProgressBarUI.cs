@@ -5,9 +5,16 @@ public class ProgressBarUI : MonoBehaviour {
     [SerializeField] private GameObject hasProgressGameObject;
     [SerializeField] private Image barImage;
 
+    private const string IS_FLASHING = "IsFlashing";
+    private Animator animator;
+
     private IHasProgress hasProgress;
 
     private float currentProgress = 0f;
+
+    private void Awake() {
+        animator = GetComponent<Animator>();
+    }
 
     public void Start() {
         hasProgress = hasProgressGameObject.GetComponent<IHasProgress>();
@@ -22,6 +29,12 @@ public class ProgressBarUI : MonoBehaviour {
 
     public void Update() {
         barImage.fillAmount = currentProgress;
+        if (hasProgress.IsFlashing() && currentProgress >= 0.5f) {
+            animator.SetBool(IS_FLASHING, true);
+        }
+        else {
+            animator.SetBool(IS_FLASHING, false);
+        }
     }
 
     private void HasProgress_OnProgressChanged(object sender,
