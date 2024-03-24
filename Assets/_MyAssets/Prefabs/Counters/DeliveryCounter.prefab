@@ -225,13 +225,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   background: {fileID: 6044789741936692313}
-  successBackgroundColor: {r: 0, g: 0.34901962, b: 0, a: 0}
-  failedBackgroundColor: {r: 0.5660378, g: 0, b: 0, a: 0}
+  successBackgroundColor: {r: 0, g: 0.34901962, b: 0, a: 1}
+  failedBackgroundColor: {r: 0.5660378, g: 0, b: 0, a: 1}
   feedbackImage: {fileID: 6394787621494295065}
-  successImageTexture: {fileID: 2800000, guid: 6c562ac6d3e47ff4794df31886c6d864, type: 3}
-  successImageColor: {r: 0, g: 0.9294118, b: 0, a: 0}
-  failedImageTexture: {fileID: 2800000, guid: 0d6e1281049dccc4189bf308b2ccf331, type: 3}
-  failedImageColor: {r: 1, g: 0, b: 0, a: 0}
+  successImageSprite: {fileID: 21300000, guid: 6c562ac6d3e47ff4794df31886c6d864, type: 3}
+  successImageColor: {r: 0, g: 0.9294118, b: 0, a: 1}
+  failedImageSprite: {fileID: 21300000, guid: 0d6e1281049dccc4189bf308b2ccf331, type: 3}
+  failedImageColor: {r: 1, g: 0, b: 0, a: 1}
   feedbackText: {fileID: 4804799383657986047}
 --- !u!225 &8167296404257758309
 CanvasGroup:
