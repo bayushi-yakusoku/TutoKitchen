@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class DeliveryCounterFeedbackUI : MonoBehaviour {
 
+    private const string TRIGGER_POPUP_FEEDBACK = "PopupDeliveryFeedback";
+
     private const string SUCCESS_RESULT = "Delivery\nSuccess";
     private const string FAILED_RESULT = "Delivery\nFailed";
 
@@ -25,6 +27,12 @@ public class DeliveryCounterFeedbackUI : MonoBehaviour {
 
     [SerializeField] private TextMeshProUGUI feedbackText;
 
+
+    private Animator animator;
+
+    private void Awake() {
+        animator = GetComponent<Animator>();
+    }
 
     private void Start() {
         DeliveryManager.Instance.OnDeliverySuccess += DeliveryManager_OnDeliverySuccess;
@@ -47,6 +55,8 @@ public class DeliveryCounterFeedbackUI : MonoBehaviour {
         feedbackImage.color = successImageColor;
 
         feedbackText.text = SUCCESS_RESULT;
+
+        animator.SetTrigger(TRIGGER_POPUP_FEEDBACK);
     }
 
     private void DisplayFailed() {
@@ -56,6 +66,8 @@ public class DeliveryCounterFeedbackUI : MonoBehaviour {
         feedbackImage.color = failedImageColor;
 
         feedbackText.text = FAILED_RESULT;
+
+        animator.SetTrigger(TRIGGER_POPUP_FEEDBACK);
     }
 
 }
