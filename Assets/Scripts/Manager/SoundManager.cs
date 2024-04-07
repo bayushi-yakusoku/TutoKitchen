@@ -35,7 +35,7 @@ public sealed class SoundManager : MonoBehaviour {
         DeliveryManager.Instance.OnDeliverySuccess += Instance_OnDeliverySuccess;
         DeliveryManager.Instance.OnDeliveryFailed += Instance_OnDeliveryFailed;
         CuttingCounter.OnPlayerInteractAlternateAnyCuttingCounter += CuttingCounter_OnPlayerInteractAlternateAnyCuttingCounter;
-        Player.Instance.OnPlayerPickedSomething += Instance_OnPlayerPickedSomething;
+        //Player.Instance.OnPlayerPickedSomething += Instance_OnPlayerPickedSomething;
         BaseCounter.OnAnyDropSomething += BaseCounter_OnDropSomething;
         TrashCounter.OnAnyTrashSomething += TrashCounter_OnAnyTrashSomething;
     }

@@ -1,7 +1,8 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
-public sealed class Player : MonoBehaviour, IKitchenObjectParent {
+public sealed class Player : NetworkBehaviour, IKitchenObjectParent {
     // Make it Singleton:
     public static Player Instance { get; private set; }
 
@@ -10,7 +11,7 @@ public sealed class Player : MonoBehaviour, IKitchenObjectParent {
 
     [SerializeField] private float playerRadius = 1f;
 
-    [SerializeField] private GameInputManager gameInput;
+    //[SerializeField] private GameInputManager gameInput;
 
     [SerializeField] private LayerMask couterLayerMask;
 
@@ -39,8 +40,8 @@ public sealed class Player : MonoBehaviour, IKitchenObjectParent {
     }
 
     private void Start() {
-        gameInput.OnInteractAction += GameInput_OnInteractAction;
-        gameInput.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
+        GameInputManager.Instance.OnInteractAction += GameInput_OnInteractAction;
+        GameInputManager.Instance.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
     }
 
     private void Update() {
@@ -53,7 +54,7 @@ public sealed class Player : MonoBehaviour, IKitchenObjectParent {
     }
 
     private void HandleMovement() {
-        Vector2 inputVector = gameInput.GetMovementVectorNormalized();
+        Vector2 inputVector = GameInputManager.Instance.GetMovementVectorNormalized();
 
         isWalking = inputVector != Vector2.zero;
 
@@ -112,7 +113,7 @@ public sealed class Player : MonoBehaviour, IKitchenObjectParent {
     }
 
     private void HandleInteraction() {
-        Vector2 inputVector = gameInput.GetMovementVectorNormalized();
+        Vector2 inputVector = GameInputManager.Instance.GetMovementVectorNormalized();
 
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
 
