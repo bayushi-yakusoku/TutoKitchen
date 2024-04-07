@@ -42,6 +42,8 @@ public sealed class Player : NetworkBehaviour, IKitchenObjectParent {
     private void Start() {
         GameInputManager.Instance.OnInteractAction += GameInput_OnInteractAction;
         GameInputManager.Instance.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
+
+        CameraManager.Singleton.AddPlayer(transform);
     }
 
     private void Update() {
