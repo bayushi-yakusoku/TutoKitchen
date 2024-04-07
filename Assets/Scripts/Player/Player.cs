@@ -3,8 +3,8 @@ using Unity.Netcode;
 using UnityEngine;
 
 public sealed class Player : NetworkBehaviour, IKitchenObjectParent {
-    // Make it Singleton:
-    public static Player Instance { get; private set; }
+    //// Make it Singleton:
+    //public static Player Instance { get; private set; }
 
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float rotateSpeed = 5f;
@@ -29,15 +29,15 @@ public sealed class Player : NetworkBehaviour, IKitchenObjectParent {
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
     public event EventHandler OnPlayerPickedSomething;
 
-    private void Awake() {
-        // Singleton simple implementation:
-        if (Instance != null) {
-            Debug.LogWarning(this + ": There is more than one Player instance... Destroying this one...");
-            Destroy(this.gameObject);
-        }
+    //private void Awake() {
+    //    // Singleton simple implementation:
+    //    if (Instance != null) {
+    //        Debug.LogWarning(this + ": There is more than one Player instance... Destroying this one...");
+    //        Destroy(this.gameObject);
+    //    }
 
-        Instance = this;
-    }
+    //    Instance = this;
+    //}
 
     private void Start() {
         GameInputManager.Instance.OnInteractAction += GameInput_OnInteractAction;
@@ -47,6 +47,12 @@ public sealed class Player : NetworkBehaviour, IKitchenObjectParent {
     }
 
     private void Update() {
+
+        // Check if local player
+        if (! IsOwner) {
+            return;
+        }
+
         HandleMovement();
         HandleInteraction();
     }
