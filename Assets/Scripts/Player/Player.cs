@@ -3,15 +3,11 @@ using Unity.Netcode;
 using UnityEngine;
 
 public sealed class Player : NetworkBehaviour, IKitchenObjectParent {
-    //// Make it Singleton:
-    //public static Player Instance { get; private set; }
 
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float rotateSpeed = 5f;
 
     [SerializeField] private float playerRadius = 1f;
-
-    //[SerializeField] private GameInputManager gameInput;
 
     [SerializeField] private LayerMask couterLayerMask;
 
@@ -29,15 +25,6 @@ public sealed class Player : NetworkBehaviour, IKitchenObjectParent {
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
     public event EventHandler OnPlayerPickedSomething;
 
-    //private void Awake() {
-    //    // Singleton simple implementation:
-    //    if (Instance != null) {
-    //        Debug.LogWarning(this + ": There is more than one Player instance... Destroying this one...");
-    //        Destroy(this.gameObject);
-    //    }
-
-    //    Instance = this;
-    //}
 
     private void Start() {
         GameInputManager.Instance.OnInteractAction += GameInput_OnInteractAction;
