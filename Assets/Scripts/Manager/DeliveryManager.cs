@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public sealed class DeliveryManager : MonoBehaviour {
+public sealed class DeliveryManager : NetworkBehaviour {
 
     // Make it Singleton:
     public static DeliveryManager Instance { get; private set; }
@@ -10,6 +11,8 @@ public sealed class DeliveryManager : MonoBehaviour {
     [SerializeField] private RecipesListSO possibleRecipesList;
     [SerializeField] private int maxWaitingRecipes;
     [SerializeField] private float spawnTimerDelay;
+
+    [SerializeField] private DeliveryCounter[] deliveryCounters;
 
     public event EventHandler OnSpawnNewRecipe;
     public event EventHandler OnDeliveredRecipe;
@@ -33,6 +36,11 @@ public sealed class DeliveryManager : MonoBehaviour {
     }
 
     private void Update() {
+
+        if (!IsServer) {
+            return;
+        }
+
         spawnTimer += Time.deltaTime;
         if (spawnTimer >= spawnTimerDelay) {
             spawnTimer = 0f;
@@ -48,20 +56,45 @@ public sealed class DeliveryManager : MonoBehaviour {
         if (waitingRecipesList.Count >= maxWaitingRecipes)
             return;
 
-        RecipeSO recipeSO = possibleRecipesList.fullList[UnityEngine.Random.Range(0,
-            possibleRecipesList.fullList.Count)];
+        Debug.Log(this + ": Server generate new recipe for waiting list");
+
+        int indexRecipeSO = UnityEngine.Random.Range(0, possibleRecipesList.fullList.Count);
+
+        AddChosenRecipeClientRpc(indexRecipeSO);
+    }
+
+    [ClientRpc]
+    private void AddChosenRecipeClientRpc(int indexRecipeSO) {
+
+        RecipeSO recipeSO = possibleRecipesList.fullList[indexRecipeSO];
 
         waitingRecipesList.Add(recipeSO);
 
         OnSpawnNewRecipe?.Invoke(this, EventArgs.Empty);
 
-        Debug.Log(this + ": waiting for a " + recipeSO.name);
+        Debug.Log(this + ": new recipe waiting " + recipeSO.name);
+
     }
 
     public void Deliver(PlateKitchenObject plate, DeliveryCounter counter) {
         List<KitchenObjectSO> plateContent = new(plate.GetPlateContent());
 
-        foreach (RecipeSO recipe in waitingRecipesList) {
+        int indexDeliveryCounters = 0;
+
+        // Find delivery counter:
+        for (int index = 0; index < deliveryCounters.Length; index++) {
+            if (deliveryCounters[index] == counter) {
+                Debug.Log(this + ": delivery Counter found");
+
+                indexDeliveryCounters = index;
+                break;
+            }
+        }
+
+        // Check If delivered recipe is successful or not:
+        for (int index = 0; index < waitingRecipesList.Count; index++) {
+            RecipeSO recipe = waitingRecipesList[index];
+
             if (recipe.ingredientsList.Count != plateContent.Count)
                 continue;
 
@@ -79,15 +112,9 @@ public sealed class DeliveryManager : MonoBehaviour {
             }
 
             if (found) {
-                Debug.Log(this + ": delivering " + recipe.name);
+                Debug.Log(this + ": successful delivering " + recipe.name);
 
-                waitingRecipesList.Remove(recipe);
-
-                OnDeliveredRecipe?.Invoke(counter, EventArgs.Empty);
-
-                RecipesSuccesfullyDelivered++;
-
-                OnDeliverySuccess?.Invoke(counter, EventArgs.Empty);
+                SuccessfulDeliveryRpc(index, indexDeliveryCounters);
 
                 return;
             }
@@ -95,8 +122,24 @@ public sealed class DeliveryManager : MonoBehaviour {
 
         Debug.Log(this + ": failed to deliver an expected recipe");
 
-        OnDeliveryFailed?.Invoke(counter, EventArgs.Empty);
+        FailedDeliveryRpc(indexDeliveryCounters);
 
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void SuccessfulDeliveryRpc(int indexRecipeSO, int indexDeliveryCounters) {
+        waitingRecipesList.RemoveAt(indexRecipeSO);
+
+        OnDeliveredRecipe?.Invoke(deliveryCounters[indexDeliveryCounters], EventArgs.Empty);
+
+        RecipesSuccesfullyDelivered++;
+
+        OnDeliverySuccess?.Invoke(deliveryCounters[indexDeliveryCounters], EventArgs.Empty);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void FailedDeliveryRpc(int indexDeliveryCounters) {
+        OnDeliveryFailed?.Invoke(deliveryCounters[indexDeliveryCounters], EventArgs.Empty);
     }
 
     public List<RecipeSO> GetWaitingRecipesList() {
@@ -106,8 +149,8 @@ public sealed class DeliveryManager : MonoBehaviour {
     private int _recipesSuccesfullyDelivered = 0;
     public int RecipesSuccesfullyDelivered {
         get => _recipesSuccesfullyDelivered;
-        private set { 
-            _recipesSuccesfullyDelivered = value; 
+        private set {
+            _recipesSuccesfullyDelivered = value;
         }
     }
 }
