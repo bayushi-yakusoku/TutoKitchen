@@ -26,9 +26,9 @@ public class KitchenGameManager : MonoBehaviour {
         }
     }
 
-    private float coutdownToStartTimer = 3f;
+    [SerializeField] private float coutdownToStartTimer = 3f;
     private float gamePlayingTimer;
-    private float gamePlayingTimerMax = 120f;
+    [SerializeField] private float gamePlayingTimerMax = 120f;
 
     public class OnStateChangedEventArgs : EventArgs {
         public EnumState state;
