@@ -225,6 +225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2776e2f5e999f54ba5c966a4d84de9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deliveryCounter: {fileID: 8916840187771484409}
   background: {fileID: 6044789741936692313}
   successBackgroundColor: {r: 0, g: 0.34901962, b: 0, a: 1}
   failedBackgroundColor: {r: 0.5660378, g: 0, b: 0, a: 1}

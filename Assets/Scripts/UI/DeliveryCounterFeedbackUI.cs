@@ -11,6 +11,10 @@ public class DeliveryCounterFeedbackUI : MonoBehaviour {
     private const string SUCCESS_RESULT = "Delivery\nSuccess";
     private const string FAILED_RESULT = "Delivery\nFailed";
 
+    [SerializeField] private DeliveryCounter deliveryCounter;
+
+    [Space(10)]
+
     [SerializeField] private Image background;
     [SerializeField] private Color successBackgroundColor;
     [SerializeField] private Color failedBackgroundColor;
@@ -40,10 +44,18 @@ public class DeliveryCounterFeedbackUI : MonoBehaviour {
     }
 
     private void DeliveryManager_OnDeliveryFailed(object sender, System.EventArgs e) {
+        if (sender != (object) deliveryCounter) {
+            return;
+        }
+
         DisplayFailed();
     }
 
     private void DeliveryManager_OnDeliverySuccess(object sender, System.EventArgs e) {
+        if (sender != (object) deliveryCounter) {
+            return;
+        }
+
         DisplaySuccess();
     }
 
