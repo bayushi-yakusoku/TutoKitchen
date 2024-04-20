@@ -13,7 +13,8 @@ public class ContainerCounter : BaseCounter {
         if (!player.HasPresentedObject()) {
             Debug.Log(this + ": player do NOT have an object");
 
-            KitchenObject.SpawnKitchenObject(kitchenObjectSO, player);
+            //KitchenObject.SpawnKitchenObject(kitchenObjectSO, player);
+            MultiplayerManager.Singleton.SpawnKitchenObject(kitchenObjectSO, player);
 
             OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
         }

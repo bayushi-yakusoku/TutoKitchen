@@ -203,4 +203,8 @@ public sealed class Player : NetworkBehaviour, IKitchenObjectParent {
     public bool HasPresentedObject() {
         return presentedObject != null;
     }
+
+    public NetworkObjectReference GetNetworkRef() {
+        return NetworkObject;
+    }
 }

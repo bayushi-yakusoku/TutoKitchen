@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class KitchenObject : MonoBehaviour {
+public class KitchenObject : NetworkBehaviour {
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
 
     private IKitchenObjectParent _owner;
@@ -38,10 +39,7 @@ public class KitchenObject : MonoBehaviour {
         Destroy(gameObject);
     }
 
-    public static KitchenObject SpawnKitchenObject(
-        KitchenObjectSO kitchenObjectSO,
-        IKitchenObjectParent kitchenObjectParent
-        ) {
+    public static KitchenObject SpawnKitchenObject(KitchenObjectSO kitchenObjectSO, IKitchenObjectParent kitchenObjectParent) {
         Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab);
 
         KitchenObject kitchenObject = kitchenObjectTransform.GetComponent<KitchenObject>();

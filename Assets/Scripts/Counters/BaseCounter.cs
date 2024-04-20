@@ -1,4 +1,5 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 public class BaseCounter : MonoBehaviour, IKitchenObjectParent
@@ -43,5 +44,9 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent
 
     public bool HasPresentedObject() {
         return presentedObject != null;
+    }
+
+    public NetworkObjectReference GetNetworkRef() {
+        return gameObject;
     }
 }
