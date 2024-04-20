@@ -31,7 +31,7 @@ public class StoveBurnWarningUI : MonoBehaviour {
             if (warningSoundDelay >= warningSoundFrequency) {
                 warningSoundDelay = 0f;
 
-                SoundManager.Instance.PlayWarningSound(stoveCounter.transform.position);
+                SoundManager.Singleton.PlayWarningSound(stoveCounter.transform.position);
             }
         }
     }

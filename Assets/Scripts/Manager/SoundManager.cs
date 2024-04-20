@@ -1,8 +1,9 @@
+using Unity.Netcode;
 using UnityEngine;
 
 public sealed class SoundManager : MonoBehaviour {
     // Make it Singleton:
-    public static SoundManager Instance { get; private set; }
+    public static SoundManager Singleton { get; private set; }
 
     private const string PLAYER_PREF_SOUND_VOLUME = "PlayerPrefVolume";
 
@@ -12,21 +13,21 @@ public sealed class SoundManager : MonoBehaviour {
     public float GlobalVolume {
         get => _globalVolume;
 
-        set { 
+        set {
             _globalVolume = value;
             PlayerPrefs.SetFloat(PLAYER_PREF_SOUND_VOLUME, _globalVolume);
             PlayerPrefs.Save();
-        } 
+        }
     }
 
     private void Awake() {
         // Singleton simple implementation:
-        if (Instance != null) {
+        if (Singleton != null) {
             Debug.LogWarning(this + ": There is more than one SoundManager instance... Destroying this one...");
             Destroy(this.gameObject);
         }
 
-        Instance = this;
+        Singleton = this;
 
         GlobalVolume = PlayerPrefs.GetFloat(PLAYER_PREF_SOUND_VOLUME, 0.5f);
     }
@@ -34,10 +35,19 @@ public sealed class SoundManager : MonoBehaviour {
     private void Start() {
         DeliveryManager.Instance.OnDeliverySuccess += Instance_OnDeliverySuccess;
         DeliveryManager.Instance.OnDeliveryFailed += Instance_OnDeliveryFailed;
+
         CuttingCounter.OnPlayerInteractAlternateAnyCuttingCounter += CuttingCounter_OnPlayerInteractAlternateAnyCuttingCounter;
-        //Player.Instance.OnPlayerPickedSomething += Instance_OnPlayerPickedSomething;
+
         BaseCounter.OnAnyDropSomething += BaseCounter_OnDropSomething;
+
         TrashCounter.OnAnyTrashSomething += TrashCounter_OnAnyTrashSomething;
+    }
+
+    public void RegisterPlayer(Player player) {
+        Debug.Log(this + ": add player:" + player);
+
+        player.OnPlayerPickedSomething -= Player_OnPlayerPickedSomething;
+        player.OnPlayerPickedSomething += Player_OnPlayerPickedSomething;
     }
 
     private void TrashCounter_OnAnyTrashSomething(object sender, System.EventArgs e) {
@@ -52,7 +62,7 @@ public sealed class SoundManager : MonoBehaviour {
         }
     }
 
-    private void Instance_OnPlayerPickedSomething(object sender, System.EventArgs e) {
+    private void Player_OnPlayerPickedSomething(object sender, System.EventArgs e) {
         if (sender is Player player) {
             PlaySound(audioClipRefsSO.objectPickup, player.transform.position);
         }

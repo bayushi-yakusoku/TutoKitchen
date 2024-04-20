@@ -63,10 +63,10 @@ public class OptionsMenuUI : MonoBehaviour {
     }
 
     private void SoundButtonClick() {
-        SoundManager.Instance.GlobalVolume += 0.1f;
+        SoundManager.Singleton.GlobalVolume += 0.1f;
 
-        if (SoundManager.Instance.GlobalVolume > 1f) {
-            SoundManager.Instance.GlobalVolume = 0f;
+        if (SoundManager.Singleton.GlobalVolume > 1f) {
+            SoundManager.Singleton.GlobalVolume = 0f;
         }
 
         UpdateUI();
@@ -97,7 +97,7 @@ public class OptionsMenuUI : MonoBehaviour {
     }
 
     private void UpdateUI() {
-        soundButtonText.text = "Sound updated:" + Mathf.Round(SoundManager.Instance.GlobalVolume * 10f);
+        soundButtonText.text = "Sound updated:" + Mathf.Round(SoundManager.Singleton.GlobalVolume * 10f);
         musicButtonText.text = "Music updated:" + Mathf.Round(MusicManager.Instance.GlobalVolume * 10f);
 
         moveUpText.text     = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.MoveUp);
