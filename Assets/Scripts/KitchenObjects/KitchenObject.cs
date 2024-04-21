@@ -19,21 +19,18 @@ public class KitchenObject : NetworkBehaviour {
                 return;
             }
 
-            UpdateInfoRpc(this.NetworkObject, value.GetNetworkRef());
+            UpdateInfoRpc(value.GetNetworkRef());
         }
     }
 
     [Rpc(SendTo.ClientsAndHost)]
-    private void UpdateInfoRpc(NetworkObjectReference me, NetworkObjectReference newOwner) {
+    private void UpdateInfoRpc(NetworkObjectReference newOwner) {
         Debug.Log(this + ": ClientsAndHost - Update kitchen object properties");
-
-        me.TryGet(out NetworkObject meObject);
-        KitchenObject meKit = meObject.GetComponent<KitchenObject>();
         
         newOwner.TryGet(out NetworkObject newOwnerObject);
         IKitchenObjectParent newIk = newOwnerObject.GetComponent<IKitchenObjectParent>();
 
-        meKit.SetOwner(newIk);
+        SetOwner(newIk);
     }
 
     private void SetOwner(IKitchenObjectParent value) {
