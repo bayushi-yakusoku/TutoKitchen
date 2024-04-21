@@ -182,7 +182,8 @@ public class StoveCounter : BaseCounter, IHasProgress {
         if (fryingRecipeSO.cookingTime < fryingTimer) {
             Debug.Log(this + $": {fryingRecipeSO.input} is {nextState}");
             GetPresentedObject().DestroySelf();
-            KitchenObject.SpawnKitchenObject(fryingRecipeSO.output, this);
+            //KitchenObject.SpawnKitchenObject(fryingRecipeSO.output, this);
+            MultiplayerManager.Singleton.SpawnKitchenObject(fryingRecipeSO.output, this);
             fryingRecipeSO = GetFryingRecipeSOWithInput(fryingRecipeSO.output);
 
             State = nextState;

@@ -39,13 +39,13 @@ public class KitchenObject : NetworkBehaviour {
         Destroy(gameObject);
     }
 
-    public static KitchenObject SpawnKitchenObject(KitchenObjectSO kitchenObjectSO, IKitchenObjectParent kitchenObjectParent) {
-        Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab);
+    //public static KitchenObject SpawnKitchenObject(KitchenObjectSO kitchenObjectSO, IKitchenObjectParent kitchenObjectParent) {
+    //    Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab);
 
-        KitchenObject kitchenObject = kitchenObjectTransform.GetComponent<KitchenObject>();
+    //    KitchenObject kitchenObject = kitchenObjectTransform.GetComponent<KitchenObject>();
 
-        kitchenObject.Owner = kitchenObjectParent;
+    //    kitchenObject.Owner = kitchenObjectParent;
 
-        return kitchenObject;
-    }
+    //    return kitchenObject;
+    //}
 }

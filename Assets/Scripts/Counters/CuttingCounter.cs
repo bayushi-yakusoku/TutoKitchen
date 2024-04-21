@@ -108,7 +108,8 @@ public class CuttingCounter : BaseCounter, IHasProgress {
 
                 if (outputKitchenObjectSO is not null) {
                     GetPresentedObject().DestroySelf();
-                    KitchenObject.SpawnKitchenObject(outputKitchenObjectSO, this);
+                    //KitchenObject.SpawnKitchenObject(outputKitchenObjectSO, this);
+                    MultiplayerManager.Singleton.SpawnKitchenObject(outputKitchenObjectSO, this);
                 }
 
                 CurrentCutCount = 0;

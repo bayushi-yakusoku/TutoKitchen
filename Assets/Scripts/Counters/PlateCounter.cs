@@ -40,7 +40,8 @@ public class PlateCounter : BaseCounter {
                 timer = 0;
                 OnRemoveLastPlate?.Invoke(this, EventArgs.Empty);
 
-                KitchenObject.SpawnKitchenObject(objectToGive, player);
+                //KitchenObject.SpawnKitchenObject(objectToGive, player);
+                MultiplayerManager.Singleton.SpawnKitchenObject(objectToGive, player);
             }
         }
     }
