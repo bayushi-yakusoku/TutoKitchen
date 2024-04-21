@@ -2,7 +2,7 @@ using System;
 using Unity.Netcode;
 using UnityEngine;
 
-public class BaseCounter : MonoBehaviour, IKitchenObjectParent
+public class BaseCounter : NetworkBehaviour, IKitchenObjectParent
 {
     public static event EventHandler OnAnyDropSomething;
 
@@ -47,6 +47,6 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent
     }
 
     public NetworkObjectReference GetNetworkRef() {
-        return gameObject;
+        return NetworkObject;
     }
 }

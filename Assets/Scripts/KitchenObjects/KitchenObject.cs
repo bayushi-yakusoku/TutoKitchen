@@ -13,20 +13,45 @@ public class KitchenObject : NetworkBehaviour {
         get => _owner;
 
         set {
-            if (_owner != null) {
-                _owner.ClearPresentedObject();
+            if (_owner == value) {
+                Debug.Log(this + ": local - update with same value canceled");
+
+                return;
             }
 
-            _owner = value;
-
-            if (_owner.HasPresentedObject()) {
-                Debug.LogError(_owner + ": has already a Presented object!");
-            }
-
-            _owner.SetPresentedObject(this);
-
-            followTarget = _owner.GetKitchenObjectFollowTransform();
+            UpdateInfoRpc(this.NetworkObject, value.GetNetworkRef());
         }
+    }
+
+    private void SetOwner(IKitchenObjectParent value) {
+        Debug.Log(this + ": local - Update kitchen object properties");
+
+        if (_owner != null) {
+            _owner.ClearPresentedObject();
+        }
+
+        _owner = value;
+
+        if (_owner.HasPresentedObject()) {
+            Debug.LogError(_owner + ": has already a Presented object!");
+        }
+
+        _owner.SetPresentedObject(this);
+
+        followTarget = _owner.GetKitchenObjectFollowTransform();
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void UpdateInfoRpc(NetworkObjectReference me, NetworkObjectReference newOwner) {
+        Debug.Log(this + ": ClientsAndHost - Update kitchen object properties");
+
+        me.TryGet(out NetworkObject meObject);
+        KitchenObject meKit = meObject.GetComponent<KitchenObject>();
+        
+        newOwner.TryGet(out NetworkObject newOwnerObject);
+        IKitchenObjectParent newIk = newOwnerObject.GetComponent<IKitchenObjectParent>();
+
+        meKit.SetOwner(newIk);
     }
 
     public void DestroySelf() {
