@@ -1,4 +1,5 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 public class ContainerCounter : BaseCounter {
@@ -16,7 +17,14 @@ public class ContainerCounter : BaseCounter {
             //KitchenObject.SpawnKitchenObject(kitchenObjectSO, player);
             MultiplayerManager.Singleton.SpawnKitchenObject(kitchenObjectSO, player);
 
-            OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
+            GrabbedObjectRpc();
         }
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void GrabbedObjectRpc() {
+        Debug.Log(this + ": ClientsAndHost - fire event OnPlayerGrabbedObject");
+
+        OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
     }
 }
