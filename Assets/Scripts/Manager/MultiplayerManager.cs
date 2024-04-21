@@ -18,14 +18,14 @@ public class MultiplayerManager : NetworkBehaviour {
     }
     
     public void SpawnKitchenObject(KitchenObjectSO kitchenObjectSO, IKitchenObjectParent kitchenObjectParent) {
-        Debug.Log(this + ": spawn " + kitchenObjectSO);
+        Debug.Log(this + ": local - spawn " + kitchenObjectSO);
 
         SpawnKitchenObjectRpc(GetIndexOfKitchenObjectSO(kitchenObjectSO), kitchenObjectParent.GetNetworkRef());
     }
 
     [Rpc(SendTo.Server)]
     private void SpawnKitchenObjectRpc(int indexOfKitchenObjectSO, NetworkObjectReference followerTarget) {
-        Debug.Log(this + ": Server - for spawn kitchen object n°" + indexOfKitchenObjectSO);
+        Debug.Log(this + ": Server - spawn kitchen object n°" + indexOfKitchenObjectSO);
 
         KitchenObjectSO kitchenObjectSO = GetKitchenObjectSO(indexOfKitchenObjectSO);
         

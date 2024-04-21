@@ -23,6 +23,19 @@ public class KitchenObject : NetworkBehaviour {
         }
     }
 
+    [Rpc(SendTo.ClientsAndHost)]
+    private void UpdateInfoRpc(NetworkObjectReference me, NetworkObjectReference newOwner) {
+        Debug.Log(this + ": ClientsAndHost - Update kitchen object properties");
+
+        me.TryGet(out NetworkObject meObject);
+        KitchenObject meKit = meObject.GetComponent<KitchenObject>();
+        
+        newOwner.TryGet(out NetworkObject newOwnerObject);
+        IKitchenObjectParent newIk = newOwnerObject.GetComponent<IKitchenObjectParent>();
+
+        meKit.SetOwner(newIk);
+    }
+
     private void SetOwner(IKitchenObjectParent value) {
         Debug.Log(this + ": local - Update kitchen object properties");
 
@@ -39,19 +52,6 @@ public class KitchenObject : NetworkBehaviour {
         _owner.SetPresentedObject(this);
 
         followTarget = _owner.GetKitchenObjectFollowTransform();
-    }
-
-    [Rpc(SendTo.ClientsAndHost)]
-    private void UpdateInfoRpc(NetworkObjectReference me, NetworkObjectReference newOwner) {
-        Debug.Log(this + ": ClientsAndHost - Update kitchen object properties");
-
-        me.TryGet(out NetworkObject meObject);
-        KitchenObject meKit = meObject.GetComponent<KitchenObject>();
-        
-        newOwner.TryGet(out NetworkObject newOwnerObject);
-        IKitchenObjectParent newIk = newOwnerObject.GetComponent<IKitchenObjectParent>();
-
-        meKit.SetOwner(newIk);
     }
 
     public void DestroySelf() {
