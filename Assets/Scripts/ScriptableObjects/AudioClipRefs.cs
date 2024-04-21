@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName = "Kitchen Chaos/Audio Clips List SO")]
 public class AudioClipRefsSO : ScriptableObject {
     public AudioClip[] chop;
     public AudioClip[] deliveryFail;

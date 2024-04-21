@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName = "Kitchen Chaos/Kitchen Object SO")]
 public class KitchenObjectSO : ScriptableObject
 {
     public Transform prefab;
