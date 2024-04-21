@@ -8,7 +8,7 @@ public class DeliveryCounter : BaseCounter {
             if (player.GetPresentedObject() is PlateKitchenObject plate) {
                 Debug.Log(this + ": it's a plate");
 
-                DeliveryManager.Instance.Deliver(plate, this);
+                DeliveryManager.Singleton.Deliver(plate, this);
 
                 plate.DestroySelf();
             }

@@ -6,7 +6,7 @@ using UnityEngine;
 public sealed class DeliveryManager : NetworkBehaviour {
 
     // Make it Singleton:
-    public static DeliveryManager Instance { get; private set; }
+    public static DeliveryManager Singleton { get; private set; }
 
     [SerializeField] private RecipesListSO possibleRecipesList;
     [SerializeField] private int maxWaitingRecipes;
@@ -25,14 +25,14 @@ public sealed class DeliveryManager : NetworkBehaviour {
 
     private void Awake() {
         // Singleton simple implementation:
-        if (Instance != null) {
+        if (Singleton != null) {
             Debug.LogWarning(this + ": There is more than one DeliveryManager instance... Destroying this one...");
             Destroy(this.gameObject);
         }
 
         waitingRecipesList = new();
 
-        Instance = this;
+        Singleton = this;
     }
 
     private void Update() {
@@ -49,7 +49,7 @@ public sealed class DeliveryManager : NetworkBehaviour {
     }
 
     private void Spawn() {
-        if (KitchenGameManager.Instance.State != KitchenGameManager.EnumState.GamePlaying) {
+        if (KitchenGameManager.Singleton.State != KitchenGameManager.EnumState.GamePlaying) {
             return;
         }
 

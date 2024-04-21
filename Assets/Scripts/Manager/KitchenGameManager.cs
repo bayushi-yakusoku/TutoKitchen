@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class KitchenGameManager : MonoBehaviour {
     // Make it Singleton:
-    public static KitchenGameManager Instance { get; private set; }
+    public static KitchenGameManager Singleton { get; private set; }
 
     public enum EnumState {
         WaitingToStart,
@@ -38,17 +38,17 @@ public class KitchenGameManager : MonoBehaviour {
 
     private void Awake() {
         // Singleton simple implementation:
-        if (Instance != null) {
+        if (Singleton != null) {
             Debug.LogWarning(this + ": There is more than one KitchenGameManager instance... Destroying this one...");
             Destroy(this.gameObject);
         }
 
-        Instance = this;
+        Singleton = this;
     }
 
     private void Start() {
-        GameInputManager.Instance.OnPauseAction += GameInputManager_OnPauseAction;
-        GameInputManager.Instance.OnInteractAction += GameInputManager_OnInteractAction;
+        GameInputManager.Singleton.OnPauseAction += GameInputManager_OnPauseAction;
+        GameInputManager.Singleton.OnInteractAction += GameInputManager_OnInteractAction;
 
         State = EnumState.WaitingToStart;
     }
@@ -57,9 +57,9 @@ public class KitchenGameManager : MonoBehaviour {
         if (State == EnumState.WaitingToStart) {
             State = EnumState.CountDownToStart;
             
-            MusicManager.Instance.Play();
+            MusicManager.Singleton.Play();
 
-            GameInputManager.Instance.OnInteractAction -= GameInputManager_OnInteractAction;
+            GameInputManager.Singleton.OnInteractAction -= GameInputManager_OnInteractAction;
         }
     }
 
@@ -168,7 +168,7 @@ public class KitchenGameManager : MonoBehaviour {
         Debug.Log(this + $": Start rebinding {binding}");
         State = EnumState.GameWaitKeyPressForRebind;
 
-        GameInputManager.Instance.SetBinding(binding, Rebound);
+        GameInputManager.Singleton.SetBinding(binding, Rebound);
     }
 
     private void Rebound() {

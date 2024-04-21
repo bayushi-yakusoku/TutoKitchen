@@ -15,13 +15,13 @@ public class GameStartCountDownUI : MonoBehaviour {
     }
 
     private void Start() {
-        KitchenGameManager.Instance.OnGameStateChange += Instance_OnGameStateChange;
+        KitchenGameManager.Singleton.OnGameStateChange += KitchenGameManager_OnGameStateChange;
 
         Hide();
     }
 
-    private void Instance_OnGameStateChange(object sender, KitchenGameManager.OnStateChangedEventArgs e) {
-        if (KitchenGameManager.Instance.IsCountDownToStartActive()) {
+    private void KitchenGameManager_OnGameStateChange(object sender, KitchenGameManager.OnStateChangedEventArgs e) {
+        if (KitchenGameManager.Singleton.IsCountDownToStartActive()) {
             Show();
         }
         else {
@@ -38,7 +38,7 @@ public class GameStartCountDownUI : MonoBehaviour {
     }
 
     private void Update() {
-        int countDownNumber = Mathf.CeilToInt(KitchenGameManager.Instance.GetCountDownToStartTimer());
+        int countDownNumber = Mathf.CeilToInt(KitchenGameManager.Singleton.GetCountDownToStartTimer());
         countDownText.text = countDownNumber.ToString();
 
         if (countDownNumber != previousCountDownNumber) {

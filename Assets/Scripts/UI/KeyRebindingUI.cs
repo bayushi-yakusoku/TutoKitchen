@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class KeyRebindingUI : MonoBehaviour {
     void Start() {
-        KitchenGameManager.Instance.OnGameStateChange += KitchenGameManager_OnGameStateChange;
+        KitchenGameManager.Singleton.OnGameStateChange += KitchenGameManager_OnGameStateChange;
 
         Hide();
     }

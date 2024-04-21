@@ -9,17 +9,17 @@ public class DeliveryManagerUI : MonoBehaviour {
     }
 
     private void Start() {
-        DeliveryManager.Instance.OnDeliveredRecipe += Instance_OnDeliveredRecipe;
-        DeliveryManager.Instance.OnSpawnNewRecipe += Instance_OnSpawnNewRecipe;
+        DeliveryManager.Singleton.OnDeliveredRecipe += DeliveryManager_OnDeliveredRecipe;
+        DeliveryManager.Singleton.OnSpawnNewRecipe += DeliveryManager_OnSpawnNewRecipe;
 
         UpdateVisual();
     }
 
-    private void Instance_OnSpawnNewRecipe(object sender, System.EventArgs e) {
+    private void DeliveryManager_OnSpawnNewRecipe(object sender, System.EventArgs e) {
         UpdateVisual();
     }
 
-    private void Instance_OnDeliveredRecipe(object sender, System.EventArgs e) {
+    private void DeliveryManager_OnDeliveredRecipe(object sender, System.EventArgs e) {
         UpdateVisual();
     }
 
@@ -32,7 +32,7 @@ public class DeliveryManagerUI : MonoBehaviour {
             Destroy(child.gameObject);
         }
 
-        foreach (RecipeSO recipeWaiting in DeliveryManager.Instance.GetWaitingRecipesList()) {
+        foreach (RecipeSO recipeWaiting in DeliveryManager.Singleton.GetWaitingRecipesList()) {
             Transform recipe = Instantiate(recipeTemplate, container);
             recipe.gameObject.SetActive(true);
             recipe.GetComponent<DeliveryManagerSingleUI>().SetRecipe(recipeWaiting, Random.Range(5, 20));

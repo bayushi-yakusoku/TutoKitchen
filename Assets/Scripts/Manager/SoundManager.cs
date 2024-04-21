@@ -33,8 +33,8 @@ public sealed class SoundManager : MonoBehaviour {
     }
 
     private void Start() {
-        DeliveryManager.Instance.OnDeliverySuccess += Instance_OnDeliverySuccess;
-        DeliveryManager.Instance.OnDeliveryFailed += Instance_OnDeliveryFailed;
+        DeliveryManager.Singleton.OnDeliverySuccess += DeliveryManager_OnDeliverySuccess;
+        DeliveryManager.Singleton.OnDeliveryFailed += DeliveryManager_OnDeliveryFailed;
 
         CuttingCounter.OnPlayerInteractAlternateAnyCuttingCounter += CuttingCounter_OnPlayerInteractAlternateAnyCuttingCounter;
 
@@ -74,13 +74,13 @@ public sealed class SoundManager : MonoBehaviour {
         }
     }
 
-    private void Instance_OnDeliveryFailed(object sender, System.EventArgs e) {
+    private void DeliveryManager_OnDeliveryFailed(object sender, System.EventArgs e) {
         if (sender is DeliveryCounter counter) {
             PlaySound(audioClipRefsSO.deliveryFail, counter.transform.position);
         }
     }
 
-    private void Instance_OnDeliverySuccess(object sender, System.EventArgs e) {
+    private void DeliveryManager_OnDeliverySuccess(object sender, System.EventArgs e) {
         if (sender is DeliveryCounter counter) {
             PlaySound(audioClipRefsSO.deliverySuccess, Camera.main.transform.position);
         }

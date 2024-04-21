@@ -36,18 +36,18 @@ public class OptionsMenuUI : MonoBehaviour {
     [SerializeField] private Button backButton;
 
     private void Start() {
-        KitchenGameManager.Instance.OnGameStateChange += KitchenGameManager_OnGameStateChange;
+        KitchenGameManager.Singleton.OnGameStateChange += KitchenGameManager_OnGameStateChange;
         soundButton.onClick.AddListener(SoundButtonClick);
         musicButton.onClick.AddListener(MusicButtonClick);
         backButton.onClick.AddListener(BackButtonClick);
 
-        moveUpButton.onClick.AddListener(() => KitchenGameManager.Instance.SetBinding(GameInputManager.EnumBinding.MoveUp));
-        moveDownButton.onClick.AddListener(() => KitchenGameManager.Instance.SetBinding(GameInputManager.EnumBinding.MoveDown));
-        moveLeftButton.onClick.AddListener(() => KitchenGameManager.Instance.SetBinding(GameInputManager.EnumBinding.MoveLeft));
-        moveRightButton.onClick.AddListener(() => KitchenGameManager.Instance.SetBinding(GameInputManager.EnumBinding.MoveRight));
-        interactButton.onClick.AddListener(() => KitchenGameManager.Instance.SetBinding(GameInputManager.EnumBinding.Interact));
-        alternateButton.onClick.AddListener(() => KitchenGameManager.Instance.SetBinding(GameInputManager.EnumBinding.Alternate));
-        pauseButton.onClick.AddListener(() => KitchenGameManager.Instance.SetBinding(GameInputManager.EnumBinding.Pause));
+        moveUpButton.onClick.AddListener(() => KitchenGameManager.Singleton.SetBinding(GameInputManager.EnumBinding.MoveUp));
+        moveDownButton.onClick.AddListener(() => KitchenGameManager.Singleton.SetBinding(GameInputManager.EnumBinding.MoveDown));
+        moveLeftButton.onClick.AddListener(() => KitchenGameManager.Singleton.SetBinding(GameInputManager.EnumBinding.MoveLeft));
+        moveRightButton.onClick.AddListener(() => KitchenGameManager.Singleton.SetBinding(GameInputManager.EnumBinding.MoveRight));
+        interactButton.onClick.AddListener(() => KitchenGameManager.Singleton.SetBinding(GameInputManager.EnumBinding.Interact));
+        alternateButton.onClick.AddListener(() => KitchenGameManager.Singleton.SetBinding(GameInputManager.EnumBinding.Alternate));
+        pauseButton.onClick.AddListener(() => KitchenGameManager.Singleton.SetBinding(GameInputManager.EnumBinding.Pause));
 
         UpdateUI();
         Hide();
@@ -73,17 +73,17 @@ public class OptionsMenuUI : MonoBehaviour {
     }
 
     private void MusicButtonClick() {
-        MusicManager.Instance.GlobalVolume += 0.1f;
+        MusicManager.Singleton.GlobalVolume += 0.1f;
 
-        if (MusicManager.Instance.GlobalVolume > 1f) {
-            MusicManager.Instance.GlobalVolume = 0f;
+        if (MusicManager.Singleton.GlobalVolume > 1f) {
+            MusicManager.Singleton.GlobalVolume = 0f;
         }
 
         UpdateUI();
     }
 
     private void BackButtonClick() {
-        KitchenGameManager.Instance.ToggleOptions();
+        KitchenGameManager.Singleton.ToggleOptions();
     }
 
     private void Show() {
@@ -98,15 +98,15 @@ public class OptionsMenuUI : MonoBehaviour {
 
     private void UpdateUI() {
         soundButtonText.text = "Sound updated:" + Mathf.Round(SoundManager.Singleton.GlobalVolume * 10f);
-        musicButtonText.text = "Music updated:" + Mathf.Round(MusicManager.Instance.GlobalVolume * 10f);
+        musicButtonText.text = "Music updated:" + Mathf.Round(MusicManager.Singleton.GlobalVolume * 10f);
 
-        moveUpText.text     = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.MoveUp);
-        moveDownText.text   = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.MoveDown);
-        moveLeftText.text   = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.MoveLeft);
-        moveRightText.text  = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.MoveRight);
-        interactText.text   = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.Interact);
-        alternateText.text  = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.Alternate);
-        pauseText.text      = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.Pause);
+        moveUpText.text     = GameInputManager.Singleton.GetBindingText(GameInputManager.EnumBinding.MoveUp);
+        moveDownText.text   = GameInputManager.Singleton.GetBindingText(GameInputManager.EnumBinding.MoveDown);
+        moveLeftText.text   = GameInputManager.Singleton.GetBindingText(GameInputManager.EnumBinding.MoveLeft);
+        moveRightText.text  = GameInputManager.Singleton.GetBindingText(GameInputManager.EnumBinding.MoveRight);
+        interactText.text   = GameInputManager.Singleton.GetBindingText(GameInputManager.EnumBinding.Interact);
+        alternateText.text  = GameInputManager.Singleton.GetBindingText(GameInputManager.EnumBinding.Alternate);
+        pauseText.text      = GameInputManager.Singleton.GetBindingText(GameInputManager.EnumBinding.Pause);
 
     }
 }

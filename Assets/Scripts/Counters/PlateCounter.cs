@@ -46,7 +46,7 @@ public class PlateCounter : BaseCounter {
     }
 
     private void SpawnPlate() {
-        if (KitchenGameManager.Instance.State != KitchenGameManager.EnumState.GamePlaying) {
+        if (KitchenGameManager.Singleton.State != KitchenGameManager.EnumState.GamePlaying) {
             return;
         }
 

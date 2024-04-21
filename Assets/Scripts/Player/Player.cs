@@ -27,8 +27,8 @@ public sealed class Player : NetworkBehaviour, IKitchenObjectParent {
 
 
     private void Start() {
-        GameInputManager.Instance.OnInteractAction += GameInput_OnInteractAction;
-        GameInputManager.Instance.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
+        GameInputManager.Singleton.OnInteractAction += GameInput_OnInteractAction;
+        GameInputManager.Singleton.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
 
         CameraManager.Singleton.AddPlayer(transform);
 
@@ -51,7 +51,7 @@ public sealed class Player : NetworkBehaviour, IKitchenObjectParent {
     }
 
     private void HandleMovement() {
-        Vector2 inputVector = GameInputManager.Instance.GetMovementVectorNormalized();
+        Vector2 inputVector = GameInputManager.Singleton.GetMovementVectorNormalized();
 
         isWalking = inputVector != Vector2.zero;
 
@@ -110,7 +110,7 @@ public sealed class Player : NetworkBehaviour, IKitchenObjectParent {
     }
 
     private void HandleInteraction() {
-        Vector2 inputVector = GameInputManager.Instance.GetMovementVectorNormalized();
+        Vector2 inputVector = GameInputManager.Singleton.GetMovementVectorNormalized();
 
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
 
@@ -146,7 +146,7 @@ public sealed class Player : NetworkBehaviour, IKitchenObjectParent {
     private void GameInput_OnInteractAction(object sender, System.EventArgs e) {
         Debug.Log(this + ": received GameInput_OnInteractAction event");
 
-        if (!KitchenGameManager.Instance.IsGamePlaying()) {
+        if (!KitchenGameManager.Singleton.IsGamePlaying()) {
             Debug.Log(this + "Game is not playing");
             return;
         }
@@ -159,7 +159,7 @@ public sealed class Player : NetworkBehaviour, IKitchenObjectParent {
     private void GameInput_OnInteractAlternateAction(object sender, EventArgs e) {
         Debug.Log(this + ": received GameInput_OnInteractAlternateAction event");
 
-        if (!KitchenGameManager.Instance.IsGamePlaying()) {
+        if (!KitchenGameManager.Singleton.IsGamePlaying()) {
             Debug.Log(this + "Game is not playing");
             return;
         }

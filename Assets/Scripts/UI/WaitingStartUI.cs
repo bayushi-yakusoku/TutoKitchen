@@ -16,7 +16,7 @@ public class WaitingStartUI : MonoBehaviour {
     private void Start() {
         Show();
 
-        KitchenGameManager.Instance.OnGameStateChange += KitchenGameObject_OnGameStateChange;
+        KitchenGameManager.Singleton.OnGameStateChange += KitchenGameObject_OnGameStateChange;
 
     }
 
@@ -40,12 +40,12 @@ public class WaitingStartUI : MonoBehaviour {
     }
 
     private void UpdateUI() {
-        tutoMoveUpText.text     = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.MoveUp);
-        tutoMoveDownText.text   = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.MoveDown);
-        tutoMoveLeftText.text   = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.MoveLeft);
-        tutoMoveRightText.text  = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.MoveRight);
-        tutoInteractText.text   = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.Interact);
-        tutoAlternateText.text  = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.Alternate);
-        tutoPauseText.text      = GameInputManager.Instance.GetBindingText(GameInputManager.EnumBinding.Pause);
+        tutoMoveUpText.text     = GameInputManager.Singleton.GetBindingText(GameInputManager.EnumBinding.MoveUp);
+        tutoMoveDownText.text   = GameInputManager.Singleton.GetBindingText(GameInputManager.EnumBinding.MoveDown);
+        tutoMoveLeftText.text   = GameInputManager.Singleton.GetBindingText(GameInputManager.EnumBinding.MoveLeft);
+        tutoMoveRightText.text  = GameInputManager.Singleton.GetBindingText(GameInputManager.EnumBinding.MoveRight);
+        tutoInteractText.text   = GameInputManager.Singleton.GetBindingText(GameInputManager.EnumBinding.Interact);
+        tutoAlternateText.text  = GameInputManager.Singleton.GetBindingText(GameInputManager.EnumBinding.Alternate);
+        tutoPauseText.text      = GameInputManager.Singleton.GetBindingText(GameInputManager.EnumBinding.Pause);
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class GameInputManager : MonoBehaviour {
     // Make it Singleton:
-    public static GameInputManager Instance { get; private set; }
+    public static GameInputManager Singleton { get; private set; }
 
     private const string PLAYER_PREF_BINDINGS = "PlayerPrefBindings";
 
@@ -27,13 +27,13 @@ public class GameInputManager : MonoBehaviour {
 
     private void Awake() {
         // Singleton simple implementation:
-        if (Instance != null) {
+        if (Singleton != null) {
             Debug.LogWarning(this + ": There is more than one GameInputManager instance... Destroying this one...");
 
             Destroy(this.gameObject);
         }
 
-        Instance = this;
+        Singleton = this;
 
         playerInputActions = new();
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MusicManager : MonoBehaviour {
     // Make it Singleton:
-    public static MusicManager Instance { get; private set; }
+    public static MusicManager Singleton { get; private set; }
 
     private const string PLAYER_PREF_MUSIC_VOLUME = "PlayerPrefMusicVolume";
 
@@ -12,12 +12,12 @@ public class MusicManager : MonoBehaviour {
 
     private void Awake() {
         // Singleton simple implementation:
-        if (Instance != null) {
+        if (Singleton != null) {
             Debug.LogWarning(this + ": There is more than one MusicManager instance... Destroying this one...");
             Destroy(this.gameObject);
         }
 
-        Instance = this;
+        Singleton = this;
 
         gameMusic = GetComponent<AudioSource>();
 

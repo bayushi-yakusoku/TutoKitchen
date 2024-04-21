@@ -9,7 +9,7 @@ public class GamePauseUI : MonoBehaviour {
 
 
     private void Start() {
-        KitchenGameManager.Instance.OnGameStateChange += KitchenGameManager_OnGameStateChange;
+        KitchenGameManager.Singleton.OnGameStateChange += KitchenGameManager_OnGameStateChange;
         mainMenuButton.onClick.AddListener(MainMenuButtonClick);
         resumeButton.onClick.AddListener(ResumeButtonClick);
         optionsButton.onClick.AddListener(OptionsButtonClick);
@@ -27,7 +27,7 @@ public class GamePauseUI : MonoBehaviour {
     }
 
     private void ResumeButtonClick() {
-        KitchenGameManager.Instance.TogglePause();
+        KitchenGameManager.Singleton.TogglePause();
     }
 
     private void MainMenuButtonClick() {
@@ -35,7 +35,7 @@ public class GamePauseUI : MonoBehaviour {
     }
 
     private void OptionsButtonClick() {
-        KitchenGameManager.Instance.ToggleOptions();
+        KitchenGameManager.Singleton.ToggleOptions();
     }
 
     private void Show() {

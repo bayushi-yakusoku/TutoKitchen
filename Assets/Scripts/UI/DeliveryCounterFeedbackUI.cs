@@ -39,8 +39,8 @@ public class DeliveryCounterFeedbackUI : MonoBehaviour {
     }
 
     private void Start() {
-        DeliveryManager.Instance.OnDeliverySuccess += DeliveryManager_OnDeliverySuccess;
-        DeliveryManager.Instance.OnDeliveryFailed += DeliveryManager_OnDeliveryFailed;
+        DeliveryManager.Singleton.OnDeliverySuccess += DeliveryManager_OnDeliverySuccess;
+        DeliveryManager.Singleton.OnDeliveryFailed += DeliveryManager_OnDeliveryFailed;
     }
 
     private void DeliveryManager_OnDeliveryFailed(object sender, System.EventArgs e) {
