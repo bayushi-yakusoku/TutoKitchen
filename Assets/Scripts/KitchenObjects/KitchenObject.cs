@@ -56,7 +56,12 @@ public class KitchenObject : NetworkBehaviour {
 
         _owner?.ClearPresentedObject();
 
-        Destroy(gameObject);
+        DestroySelfRpc();
+    }
+
+    [Rpc(SendTo.Server)]
+    private void DestroySelfRpc() {
+        NetworkObject.Despawn();
     }
 
     private Transform followTarget;
