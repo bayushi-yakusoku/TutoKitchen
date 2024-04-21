@@ -16,7 +16,7 @@ public class MultiplayerManager : NetworkBehaviour {
 
         Singleton = this;
     }
-
+    
     public void SpawnKitchenObject(KitchenObjectSO kitchenObjectSO, IKitchenObjectParent kitchenObjectParent) {
         Debug.Log(this + ": spawn " + kitchenObjectSO);
 
@@ -24,8 +24,8 @@ public class MultiplayerManager : NetworkBehaviour {
     }
 
     [Rpc(SendTo.Server)]
-    private void SpawnKitchenObjectRpc(int indexOfKitchenObjectSO, NetworkObjectReference kitchenObjectParent) {
-        Debug.Log(this + ": Server Rpc for spawn kitchen object n°" + indexOfKitchenObjectSO);
+    private void SpawnKitchenObjectRpc(int indexOfKitchenObjectSO, NetworkObjectReference followerTarget) {
+        Debug.Log(this + ": Server - for spawn kitchen object n°" + indexOfKitchenObjectSO);
 
         KitchenObjectSO kitchenObjectSO = GetKitchenObjectSO(indexOfKitchenObjectSO);
         
@@ -34,10 +34,30 @@ public class MultiplayerManager : NetworkBehaviour {
         NetworkObject instantiatedNetworkObject = kitchenObjectTransform.GetComponent<NetworkObject>();
         instantiatedNetworkObject.Spawn();
 
-        //KitchenObject kitchenObject = kitchenObjectTransform.GetComponent<KitchenObject>();
+        SetFollowTargetRpc(instantiatedNetworkObject, followerTarget);
 
-        //kitchenObject.Owner = kitchenObjectParent;
+    }
+    
+    [Rpc(SendTo.ClientsAndHost)]
+    private void SetFollowTargetRpc(NetworkObjectReference followerRef, NetworkObjectReference targetRef) {
+        Debug.Log(this + ": ClientsAndHost - Set follow target: " + followerRef + " targeting: " + targetRef);
 
+        if (! followerRef.TryGet(out NetworkObject followerObject)) {
+            Debug.LogError(this + ": ClientsAndHost - cannot find corresponding follower network object");
+            
+            return;
+        }
+
+        if (!targetRef.TryGet(out NetworkObject targetObject)) {
+            Debug.LogError(this + ": ClientsAndHost - cannot find corresponding target network object");
+
+            return;
+        }
+
+        IKitchenObjectParent target = targetObject.GetComponent<IKitchenObjectParent>();
+
+        KitchenObject follower = followerObject.GetComponent<KitchenObject>();
+        follower.Owner = target;
     }
 
     private int GetIndexOfKitchenObjectSO(KitchenObjectSO kitchenObjectSO) {

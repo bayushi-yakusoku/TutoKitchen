@@ -4,12 +4,11 @@ using UnityEngine;
 public class KitchenObject : NetworkBehaviour {
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
 
-    private IKitchenObjectParent _owner;
-
     public KitchenObjectSO GetKitchenObjectSO() {
         return kitchenObjectSO;
     }
 
+    private IKitchenObjectParent _owner;
     public IKitchenObjectParent Owner {
         get => _owner;
 
@@ -26,8 +25,7 @@ public class KitchenObject : NetworkBehaviour {
 
             _owner.SetPresentedObject(this);
 
-            transform.parent = _owner.GetKitchenObjectFollowTransform();
-            transform.localPosition = Vector3.zero;
+            followTarget = _owner.GetKitchenObjectFollowTransform();
         }
     }
 
@@ -39,13 +37,11 @@ public class KitchenObject : NetworkBehaviour {
         Destroy(gameObject);
     }
 
-    //public static KitchenObject SpawnKitchenObject(KitchenObjectSO kitchenObjectSO, IKitchenObjectParent kitchenObjectParent) {
-    //    Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab);
+    private Transform followTarget;
 
-    //    KitchenObject kitchenObject = kitchenObjectTransform.GetComponent<KitchenObject>();
-
-    //    kitchenObject.Owner = kitchenObjectParent;
-
-    //    return kitchenObject;
-    //}
+    private void Update() {
+        if (followTarget != null) {
+            transform.SetPositionAndRotation(followTarget.position, followTarget.rotation);
+        }
+    }
 }

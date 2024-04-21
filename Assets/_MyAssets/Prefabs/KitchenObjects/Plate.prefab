@@ -135,8 +135,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2136386028966413426}
-  - component: {fileID: 1664452044902957308}
   - component: {fileID: 100224624955236011}
+  - component: {fileID: 1664452044902957308}
   m_Layer: 0
   m_Name: Plate
   m_TagString: Untagged
@@ -162,6 +162,27 @@ Transform:
   - {fileID: 5741805281458073505}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &100224624955236011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5049112790951452793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3367246128
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!114 &1664452044902957308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,27 +203,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9deea188c2bda3f4fa2b1c94389aa17e, type: 2}
   - {fileID: 11400000, guid: 3b019d0b954c83648aa719df10ac5eca, type: 2}
   - {fileID: 11400000, guid: adf33f5d12049ec4fbed68de5e41ee1b, type: 2}
---- !u!114 &100224624955236011
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5049112790951452793}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 0
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!1 &7756788829042116001
 GameObject:
   m_ObjectHideFlags: 0
