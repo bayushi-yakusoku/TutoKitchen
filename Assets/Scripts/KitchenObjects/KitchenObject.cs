@@ -37,14 +37,12 @@ public class KitchenObject : NetworkBehaviour {
         Debug.Log(this + ": local - Update kitchen object properties");
 
         if (_owner != null) {
+            // This KitchenObject was already presented by something,
+            // so first we clear previous Presenter
             _owner.ClearPresentedObject();
         }
 
         _owner = value;
-
-        if (_owner.HasPresentedObject()) {
-            Debug.LogError(_owner + ": has already a Presented object!");
-        }
 
         _owner.SetPresentedObject(this);
 
